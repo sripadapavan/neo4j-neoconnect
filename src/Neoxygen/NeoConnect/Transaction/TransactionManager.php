@@ -10,4 +10,7 @@
 
 namespace Neoxygen\NeoConnect\Transaction;
 
-use Doctrine\Colle
+class TransactionManager implements TransactionManagerInterface
+{
+
+}
