@@ -22,7 +22,8 @@
         "symfony/stopwatch" : "~2.5@dev",
         "symfony/filesystem" : "~2.5@dev",
         "guzzlehttp/guzzle" : "4.*",
-        "jms/serializer": "0.17.*@dev"
+        "jms/serializer": "0.17.*@dev",
+        "doctrine/collections": "1.2.*@dev"
     },
     "require-dev": {
         "monolog/monolog": "~1.3",
