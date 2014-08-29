@@ -12,5 +12,5 @@ namespace Neoxygen\NeoConnect;
 
 interface ConnectionInterface
 {
-    public function sendCypherQuery($query, $parameters);
+    public function sendCypherQuery($query, array $parameters = array());
 }

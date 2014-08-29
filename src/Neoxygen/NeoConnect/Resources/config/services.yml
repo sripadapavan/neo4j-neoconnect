@@ -1,3 +1,7 @@
+parameters:
+  neoconnect.transaction.commit_strategy: auto
+  neoconnect.transaction.stack_flush_limit: 10
+
 services:
   neoconnect.http_client:
     class: "%neoconnect.connection.class%"
@@ -12,3 +16,13 @@ services:
   neoconnect.api_discovery:
     class: "Neoxygen\\NeoConnect\\Api\\Discovery"
     arguments: ["@neoconnect.http_client", "@neoconnect.deserializer"]
+
+  neoconnect.transaction_manager:
+    class: "Neoxygen\\NeoConnect\\Transaction\\TransactionManager"
+    arguments:
+      - "%neoconnect.transaction.commit_strategy%"
+      - "%neoconnect.transaction.stack_flush_limit%"
+      - "@neoconnect.http_client"
+      - "@neoconnect.api_discovery"
+      - "@neoconnect.deserializer"
+      - "@neoconnect.event_dispatcher"

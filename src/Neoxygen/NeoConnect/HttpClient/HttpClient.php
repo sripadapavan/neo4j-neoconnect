@@ -32,7 +32,7 @@ class HttpClient implements HttpClientInterface
     public function send($method, $url = null, array $defaults = array(), $body = null)
     {
         $uri = null !== $url ? (string) $url : $this->baseUrl;
-        $request = $this->client->createRequest($method, $uri, $defaults, $body);
+        $request = $this->client->createRequest($method, $uri, ['timeout' => 5], $body);
 
         $event = new PreRequestSendEvent($request);
 

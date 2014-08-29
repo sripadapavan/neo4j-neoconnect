@@ -12,9 +12,30 @@ namespace Neoxygen\NeoConnect\Transaction;
 
 class Statement
 {
-    protected $query;
-
+    protected $statement;
     protected $parameters;
+    protected $resultDataContents;
+
+    public function __construct($statement, array $parameters = array())
+    {
+        $this->setStatement($statement);
+        $this->parameters = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatement()
+    {
+        return $this->statement;
+    }
+
+    public function setStatement($statement)
+    {
+        $this->statement = (string) $statement;
+    }
 
     /**
      * @return mixed
@@ -35,16 +56,29 @@ class Statement
     /**
      * @return mixed
      */
-    public function getQuery()
+    public function getResultDataContents()
     {
-        return $this->query;
+        return $this->resultDataContents;
     }
 
     /**
-     * @param mixed $query
+     * @param mixed $resultDataContents
      */
-    public function setQuery($query)
+    public function setResultDataContents(array $resultDataContents = array())
     {
-        $this->query = $query;
+        $this->resultDataContents = $resultDataContents;
+    }
+
+    public function prepare()
+    {
+        $statement =  array(
+            'statement' => $this->statement
+        );
+        if (null !== $this->getParameters() && count($this->getParameters()) > 0) {
+            $statement['parameters'] = $this->getParameters();
+        }
+        if (null !== $this->getResultDataContents() && count($this->getResultDataContents()) > 0) {
+            $statement['resultDataContents'] = $this->getResultDataContents();
+        }
     }
 }
