@@ -1,0 +1,6 @@
+.idea/
+.DS_Store
+vendor/
+bin/phpspec
+bin/phpunit
+test.php

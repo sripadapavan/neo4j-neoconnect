@@ -1,0 +1,14 @@
+services:
+  neoconnect.http_client:
+    class: "%neoconnect.connection.class%"
+    arguments: ["%neoconnect.connection.scheme%","%neoconnect.connection.host%","%neoconnect.connection.port%","@neoconnect.event_dispatcher"]
+
+  neoconnect.event_dispatcher:
+    class: "Neoxygen\\NeoConnect\\EventDispatcher\\EventDispatcher"
+
+  neoconnect.deserializer:
+    class: "Neoxygen\\NeoConnect\\Deserializer\\Deserializer"
+
+  neoconnect.api_discovery:
+    class: "Neoxygen\\NeoConnect\\Api\\Discovery"
+    arguments: ["@neoconnect.http_client", "@neoconnect.deserializer"]
