@@ -80,5 +80,7 @@ class Statement
         if (null !== $this->getResultDataContents() && count($this->getResultDataContents()) > 0) {
             $statement['resultDataContents'] = $this->getResultDataContents();
         }
+
+        return $statement;
     }
 }

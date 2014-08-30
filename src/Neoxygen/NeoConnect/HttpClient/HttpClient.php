@@ -29,10 +29,14 @@ class HttpClient implements HttpClientInterface
         $this->client = new Client();
     }
 
-    public function send($method, $url = null, array $defaults = array(), $body = null)
+    public function send($method, $url = null, $body = null, array $defaults = array())
     {
         $uri = null !== $url ? (string) $url : $this->baseUrl;
-        $request = $this->client->createRequest($method, $uri, ['timeout' => 5], $body);
+
+        // Will be change further with Event PRE_REQUEST_CREATE passing url, body and defaults
+        $body = json_encode($body);
+
+        $request = $this->client->createRequest($method, $uri, ['timeout' => 5, 'body' => $body]);
 
         $event = new PreRequestSendEvent($request);
 

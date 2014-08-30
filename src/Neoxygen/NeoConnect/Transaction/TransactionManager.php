@@ -11,7 +11,9 @@
 namespace Neoxygen\NeoConnect\Transaction;
 
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
-    Neoxygen\NeoConnect\Api\Discovery;
+    Neoxygen\NeoConnect\Api\Discovery,
+    Neoxygen\NeoConnect\Transaction\StatementStack,
+    Neoxygen\NeoConnect\Transaction\Statement;
 
 class TransactionManager implements TransactionManagerInterface
 {
@@ -36,6 +38,7 @@ class TransactionManager implements TransactionManagerInterface
         $this->stackFlushLimit = $stackFlushLimit;
         $this->httpClient = $httpClient;
         $this->apiDiscovery = $apiDiscovery;
+        $this->stack = new StatementStack();
     }
 
     /**
@@ -70,9 +73,25 @@ class TransactionManager implements TransactionManagerInterface
         return $this->stack;
     }
 
-    public function createStatement()
+    public function createStatement($query, array $parameters = array())
     {
+        $statement = new Statement($query, $parameters);
+        $this->stack->addStatement($statement);
 
+        return $this->flushStack();
+    }
+
+    public function flushStack()
+    {
+        $sts = array('statements' => array());
+        if (0 !== $this->stack->count()) {
+            foreach ($this->stack->getStatements() as $statetement) {
+                $sts['statements'][] = $statetement->prepare();
+            }
+        }
+        $url = $this->apiDiscovery->getDataEndpoint()->getTransaction().'/commit';
+
+        return $this->httpClient->send('POST', $url, $sts);
     }
 
     /**

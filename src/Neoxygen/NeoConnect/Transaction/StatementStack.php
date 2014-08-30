@@ -44,4 +44,9 @@ class StatementStack
     {
         $this->statements->add($statement);
     }
+
+    public function count()
+    {
+        return $this->getStatements()->count();
+    }
 }
