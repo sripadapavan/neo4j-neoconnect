@@ -1,9 +1,11 @@
 language: php
 
 php:
-    - 5.3
     - 5.4
     - 5.5
+
+env:
+  - NEO_VERSION="2.1.3"
 
 branches:
     only:
@@ -11,6 +13,9 @@ branches:
 
 before_install:
     - sudo apt-get update > /dev/null
+    - wget dist.neo4j.org/neo4j-community-$NEO_VERSION-unix.tar.gz > null
+    - tar -xzf neo4j-community-$NEO_VERSION-unix.tar.gz > null
+    - neo4j-community-$NEO_VERSION/bin/neo4j start > null
 
 before_script:
     - composer self-update

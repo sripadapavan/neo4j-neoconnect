@@ -21,4 +21,11 @@ class ConnectionBuilderSpec extends ObjectBehavior
     {
         $this->build()->shouldHaveType('Neoxygen\NeoConnect\Connection');
     }
+
+    function it_loads_parameters_from_array()
+    {
+        $config = array('connection' => array('host' => '10.2.2.2'));
+        $this->loadConfiguration($config);
+        $this->getConfiguration()->shouldReturn($config);
+    }
 }
