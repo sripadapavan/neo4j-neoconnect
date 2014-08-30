@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94a46a8baa82dd8af0403809b8b36309",
+    "hash": "3afd685e671b9a6f1c14fe8345959ecb",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -203,12 +203,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "10fc6b7ed468a3dd1d6de85cfa8d2fe8f7f4b7dc"
+                "reference": "f36ab448d04c864f88d84db00dac35e3f8f0f144"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/10fc6b7ed468a3dd1d6de85cfa8d2fe8f7f4b7dc",
-                "reference": "10fc6b7ed468a3dd1d6de85cfa8d2fe8f7f4b7dc",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f36ab448d04c864f88d84db00dac35e3f8f0f144",
+                "reference": "f36ab448d04c864f88d84db00dac35e3f8f0f144",
                 "shasum": ""
             },
             "require": {
@@ -260,7 +260,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-08-26 19:29:13"
+            "time": "2014-08-30 20:56:40"
         },
         {
             "name": "guzzlehttp/streams",
@@ -1203,12 +1203,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/phpspec.git",
-                "reference": "1698efd3649770087cee5581a7e9c9a1ed51f194"
+                "reference": "46f613512859e6c452fd338c01839590f0a0b0d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/1698efd3649770087cee5581a7e9c9a1ed51f194",
-                "reference": "1698efd3649770087cee5581a7e9c9a1ed51f194",
+                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/46f613512859e6c452fd338c01839590f0a0b0d5",
+                "reference": "46f613512859e6c452fd338c01839590f0a0b0d5",
                 "shasum": ""
             },
             "require": {
@@ -1220,6 +1220,7 @@
                 "symfony/console": "~2.1",
                 "symfony/event-dispatcher": "~2.1",
                 "symfony/finder": "~2.1",
+                "symfony/process": "~2.1",
                 "symfony/yaml": "~2.1"
             },
             "require-dev": {
@@ -1270,7 +1271,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2014-08-30 17:08:01"
+            "time": "2014-08-30 21:13:54"
         },
         {
             "name": "phpspec/prophecy",
@@ -2063,6 +2064,53 @@
                 }
             ],
             "description": "Symfony Finder Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-08-14 16:37:29"
+        },
+        {
+            "name": "symfony/process",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "ba2c477082cf505c1721ea6e68010bb1fcfaef8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/ba2c477082cf505c1721ea6e68010bb1fcfaef8b",
+                "reference": "ba2c477082cf505c1721ea6e68010bb1fcfaef8b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
             "time": "2014-08-14 16:37:29"
         }
