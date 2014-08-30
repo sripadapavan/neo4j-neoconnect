@@ -1,0 +1,23 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+
+branches:
+    only:
+        - master
+
+before_install:
+    - sudo apt-get update > /dev/null
+
+before_script:
+    - composer self-update
+    - composer install --prefer-source --no-interaction
+
+script:
+    - bin/phpspec run -f dot
+
+notifications:
+    email: "willemsen.christophe@gmail.com"

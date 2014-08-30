@@ -13,7 +13,8 @@ namespace Neoxygen\NeoConnect\Api;
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Deserializer\Deserializer,
     Neoxygen\NeoConnect\Deserializer\Api\RootEndpoint,
-    Neoxygen\NeoConnect\Deserializer\Api\ManagementEndpoint;
+    Neoxygen\NeoConnect\Deserializer\Api\ManagementEndpoint,
+    Neoxygen\NeoConnect\Deserializer\Api\DataEndpoint;
 
 class Discovery
 {
@@ -49,6 +50,11 @@ class Discovery
     public function getDataEndpoint()
     {
         return $this->data;
+    }
+
+    public function setDataEndpoint(DataEndpoint $dataEndpoint)
+    {
+        $this->data = $dataEndpoint;
     }
 
     private function discoverRootEndpoint()
