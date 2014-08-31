@@ -23,4 +23,56 @@ class ConnectionBuilderTest extends \PHPUnit_Framework_TestCase
         $create = ConnectionBuilder::create();
         $this->assertFalse($create->getContainer()->getParameterBag()->isResolved());
     }
+
+    public function testConnectionInstanceIsReturnedWhenBuilding()
+    {
+        $conn = ConnectionBuilder::create()->build();
+        $this->assertInstanceOf('Neoxygen\NeoConnect\Connection', $conn);
+    }
+
+    public function testConfigurationisEmptyWhenCreate()
+    {
+        $builder = $this->getCreateFactory();
+        $this->assertTrue(is_array($builder->getConfiguration()));
+    }
+
+    public function testConfigurationCanBeLoadedWhileCreatint()
+    {
+        $builder = $this->getCreateFactory();
+        $config = array(
+            'connection' => array(
+                'host' => '10.2.2.2',
+                'port' => 7575
+            )
+        );
+        $builder->loadConfiguration($config);
+        $this->assertEquals($config, $builder->getConfiguration());
+    }
+
+    public function testConfigurationsCanBeMerged()
+    {
+        $builder = $this->getCreateFactory();
+        $config = array(
+            'connection' => array(
+                'host' => '10.2.2.2',
+                'port' => 7575
+            )
+        );
+        $builder->loadConfiguration($config);
+        $config2 = array(
+            'connection' => array(
+                'host' => 'localhost',
+                'port' => 7474
+            )
+        );
+        $builder->loadConfiguration($config2);
+        $this->assertEquals($config2, $builder->getConfiguration());
+    }
+
+    private function getCreateFactory()
+    {
+        $create = ConnectionBuilder::create();
+
+        return $create;
+    }
 }

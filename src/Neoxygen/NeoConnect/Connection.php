@@ -90,4 +90,9 @@ class Connection implements ConnectionInterface
     {
         return $this->getService('neoconnect.stack_manager');
     }
+
+    private function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
 }

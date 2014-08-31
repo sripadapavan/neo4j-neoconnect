@@ -24,6 +24,7 @@ class ConnectionBuilder
     public function __construct()
     {
         $this->serviceContainer = new ContainerBuilder();
+        $this->configuration = array();
     }
 
     public static function create()
@@ -51,12 +52,8 @@ class ConnectionBuilder
         return new Connection($this->serviceContainer);
     }
 
-    public function getConfiguration($defaultArray = false)
+    public function getConfiguration()
     {
-        if (null === $this->configuration && $defaultArray) {
-            return array();
-        }
-
         return $this->configuration;
     }
 
@@ -68,7 +65,7 @@ class ConnectionBuilder
     private function registerAndLoadExtension(ExtensionInterface $extension)
     {
         $this->serviceContainer->registerExtension($extension);
-        $this->serviceContainer->loadFromExtension($extension->getAlias(), $this->getConfiguration(true));
+        $this->serviceContainer->loadFromExtension($extension->getAlias(), $this->getConfiguration());
     }
 
     private function compileContainer()
