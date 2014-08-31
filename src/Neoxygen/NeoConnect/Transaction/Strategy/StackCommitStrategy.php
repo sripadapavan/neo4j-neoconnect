@@ -16,9 +16,6 @@ class StackCommitStrategy implements CommitStrategyInterface
 {
     protected $stackFlushLimit;
 
-    /**
-     *
-     */
     public function __construct($stackFlushLimit)
     {
         $this->stackFlushLimit = $stackFlushLimit;
@@ -35,6 +32,7 @@ class StackCommitStrategy implements CommitStrategyInterface
                 return true;
             }
         }
+
         return false;
     }
 }

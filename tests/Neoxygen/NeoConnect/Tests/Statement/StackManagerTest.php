@@ -3,9 +3,7 @@
 namespace Neoxygen\NeoConnect\Tests\Statement;
 
 use Neoxygen\NeoConnect\Statement\Statement,
-    Neoxygen\NeoConnect\Statement\StatementStack,
     Neoxygen\NeoConnect\Statement\StackManager;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class StackManagerTest extends \PHPUnit_Framework_TestCase
 {
