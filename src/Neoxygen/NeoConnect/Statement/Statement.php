@@ -19,7 +19,7 @@ class Statement
     public function __construct($statement, array $parameters = array())
     {
         $this->setStatement($statement);
-        $this->parameters = $parameters;
+        $this->setParameters($parameters);
 
         return $this;
     }
