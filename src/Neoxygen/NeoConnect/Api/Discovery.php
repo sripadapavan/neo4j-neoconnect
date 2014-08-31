@@ -55,6 +55,8 @@ class Discovery
     public function setDataEndpoint(DataEndpoint $dataEndpoint)
     {
         $this->data = $dataEndpoint;
+
+        return $this;
     }
 
     private function discoverRootEndpoint()
