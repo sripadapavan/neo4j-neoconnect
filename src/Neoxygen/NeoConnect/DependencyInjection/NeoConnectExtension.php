@@ -39,9 +39,8 @@ class NeoConnectExtension implements ExtensionInterface
         $commitStrategy = $config['transaction']['commit_strategy']['strategy'];
         if ('custom' !== $commitStrategy) {
             $loader->load('commit_strategy/' . $commitStrategy . '.yml');
+            $container->setAlias('neoconnect.commit_strategy', $config['service']['commit_strategy_' . $commitStrategy]);
         }
-        $container->setAlias('neoconnect.commit_strategy', $config['service']['commit_strategy_' . $commitStrategy]);
-
     }
 
     public function getAlias()

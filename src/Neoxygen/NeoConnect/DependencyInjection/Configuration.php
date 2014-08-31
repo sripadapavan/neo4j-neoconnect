@@ -21,6 +21,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neoconnect');
 
+        $supportedCommitStrategies = array('auto', 'stack', 'custom');
+
         $rootNode->children()
             ->arrayNode('connection')
             ->addDefaultsIfNotSet()
@@ -39,12 +41,23 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('commit_strategy')
                     ->addDefaultsIfNotSet()
                         ->children()
-                        ->scalarNode('strategy')->defaultValue('auto')->end()
+                        ->scalarNode('strategy')->defaultValue('auto')
+                            ->validate()
+                            ->ifNotInArray($supportedCommitStrategies)
+                            ->thenInvalid('The commit strategy %s is not supported. Please choose one of
+                            '.json_encode($supportedCommitStrategies))
+                        ->end()
+                        ->end()
                         ->scalarNode('class')->end()
+                        ->integerNode('stack_flush_limit')->end()
                     ->end()
                 ->end()
             ->end()
-        ->end();
+            ->validate()
+                ->ifTrue(function ($v) {return $v['transaction']['commit_strategy']['strategy'] === 'custom'
+                && empty($config['transaction']['commit_strategy']['class']);})
+                ->thenInvalid("You need to specify your custom commit strategy class")
+            ->end();
 
         $this->addServiceSection($rootNode);
 
