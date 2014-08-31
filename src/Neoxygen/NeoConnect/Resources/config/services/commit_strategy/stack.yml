@@ -1,0 +1,8 @@
+parameters:
+  neoconnect.transaction.commit_strategy.stack_commit_strategy.class: Neoxygen\NeoConnect\Transaction\Strategy\StackCommitStrategy
+
+services:
+  neoconnect.transaction.stack_commit_strategy:
+    class: "%neoconnect.transaction.commit_strategy.stack_commit_strategy.class%"
+    arguments:
+      - "%neoconnect.transaction.commit_strategy.stack_flush_limit%"

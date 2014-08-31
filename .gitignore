@@ -4,3 +4,4 @@ vendor/
 bin/phpspec
 bin/phpunit
 test.php
+tests/_reports/

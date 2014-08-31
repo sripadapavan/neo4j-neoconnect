@@ -12,6 +12,7 @@ namespace Neoxygen\NeoConnect\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Configuration implements ConfigurationInterface
 {
@@ -19,6 +20,8 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neoconnect');
+
+        $supportedCommitStrategies = array('auto', 'stack', 'custom');
 
         $rootNode->children()
             ->arrayNode('connection')
@@ -31,8 +34,54 @@ class Configuration implements ConfigurationInterface
                     ->integerNode('port')->defaultValue('7474')->end()
                 ->end()
                 ->end()
+            ->arrayNode('transaction')
+            ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('mode')->defaultValue('auto')->end()
+                    ->arrayNode('commit_strategy')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                        ->scalarNode('strategy')->defaultValue('auto')
+                            ->validate()
+                            ->ifNotInArray($supportedCommitStrategies)
+                            ->thenInvalid('The commit strategy %s is not supported. Please choose one of
+                            '.json_encode($supportedCommitStrategies))
+                        ->end()
+                        ->end()
+                        ->scalarNode('class')->end()
+                        ->integerNode('stack_flush_limit')->end()
+                    ->end()
+                ->end()
+            ->end()
+            ->validate()
+                ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'custom'
+                && empty($v['commit_strategy']['class']);})
+                ->thenInvalid("You need to specify your custom commit strategy class")
+            ->end()
+            ->validate()
+                ->ifTrue(function($v) {return $v['commit_strategy']['strategy'] === 'stack'
+                && empty($v['commit_strategy']['stack_flush_limit']);})
+                ->thenInvalid('You need to specify a value for "stack_flush_limit" when using Stack Commit Strategy')
             ->end();
 
+        $this->addServiceSection($rootNode);
+
         return $treeBuilder;
+    }
+
+    private function addServiceSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('service')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('commit_strategy_auto')->defaultValue('neoconnect.transaction.auto_commit_strategy')->end()
+                    ->scalarNode('commit_strategy_stack')->defaultValue('neoconnect.transaction.stack_commit_strategy')->end()
+                    ->end()
+                ->end()
+                ->end()
+            ->end();
     }
 }

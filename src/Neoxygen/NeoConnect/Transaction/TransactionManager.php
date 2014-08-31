@@ -12,16 +12,18 @@ namespace Neoxygen\NeoConnect\Transaction;
 
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Api\Discovery,
-    Neoxygen\NeoConnect\Transaction\StatementStack,
-    Neoxygen\NeoConnect\Transaction\Statement;
+    Neoxygen\NeoConnect\Statement\StatementStack,
+    Neoxygen\NeoConnect\Statement\Statement,
+    Neoxygen\NeoConnect\Statement\StackManager,
+    Neoxygen\NeoConnect\Transaction\Strategy\CommitStrategyInterface;
 
 class TransactionManager implements TransactionManagerInterface
 {
     protected $commitStrategy;
     protected $stackFlushLimit;
-    protected $stack;
     protected $httpClient;
     protected $apiDiscovery;
+    protected $stackManager;
 
     /**
      * @param string              $commitStrategy
@@ -29,16 +31,15 @@ class TransactionManager implements TransactionManagerInterface
      * @param HttpClientInterface $httpClient
      */
     public function __construct(
-        $commitStrategy = 'auto',
-        $stackFlushLimit = null,
+        StackManager $stackManager,
+        CommitStrategyInterface $commitStrategy,
         HttpClientInterface $httpClient,
         Discovery $apiDiscovery)
     {
         $this->commitStrategy = $commitStrategy;
-        $this->stackFlushLimit = $stackFlushLimit;
         $this->httpClient = $httpClient;
         $this->apiDiscovery = $apiDiscovery;
-        $this->stack = new StatementStack();
+        $this->stackManager = $stackManager;
     }
 
     /**
@@ -65,33 +66,22 @@ class TransactionManager implements TransactionManagerInterface
         return $this->stackFlushLimit;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getStack()
+    public function getStackManager()
     {
-        return $this->stack;
+        return $this->stackManager;
     }
 
-    public function createStatement($query, array $parameters = array())
+    public function handleStackCommit()
     {
-        $statement = new Statement($query, $parameters);
-        $this->stack->addStatement($statement);
+        $stack = $this->getStackManager()->getStack();
+        if ($this->getCommitStrategy()->shouldBeFlushed($stack)) {
+            $requestBody = $this->getStackManager()->prepareStatementsForFlush();
+            $url = $this->apiDiscovery->getDataEndpoint()->getTransaction().'/commit';
 
-        return $this->flushStack();
-    }
+            $response = $this->httpClient->send('POST', $url, $requestBody);
 
-    public function flushStack()
-    {
-        $sts = array('statements' => array());
-        if (0 !== $this->stack->count()) {
-            foreach ($this->stack->getStatements() as $statetement) {
-                $sts['statements'][] = $statetement->prepare();
-            }
+            return $response;
         }
-        $url = $this->apiDiscovery->getDataEndpoint()->getTransaction().'/commit';
-
-        return $this->httpClient->send('POST', $url, $sts);
     }
 
     /**
