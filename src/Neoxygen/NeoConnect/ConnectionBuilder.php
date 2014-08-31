@@ -83,4 +83,9 @@ class ConnectionBuilder
             $defaultsHeadersListener, 'onPreRequestSend'
         ));
     }
+
+    public function getContainer()
+    {
+        return $this->serviceContainer;
+    }
 }

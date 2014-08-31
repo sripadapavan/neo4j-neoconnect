@@ -54,9 +54,14 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->validate()
-                ->ifTrue(function ($v) {return $v['transaction']['commit_strategy']['strategy'] === 'custom'
-                && empty($config['transaction']['commit_strategy']['class']);})
+                ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'custom'
+                && empty($v['commit_strategy']['class']);})
                 ->thenInvalid("You need to specify your custom commit strategy class")
+            ->end()
+            ->validate()
+                ->ifTrue(function($v) {return $v['commit_strategy']['strategy'] === 'stack'
+                && empty($v['commit_strategy']['stack_flush_limit']);})
+                ->thenInvalid('You need to specify a value for "stack_flush_limit" when using Stack Commit Strategy')
             ->end();
 
         $this->addServiceSection($rootNode);
@@ -73,6 +78,7 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('commit_strategy_auto')->defaultValue('neoconnect.transaction.auto_commit_strategy')->end()
+                    ->scalarNode('commit_strategy_stack')->defaultValue('neoconnect.transaction.stack_commit_strategy')->end()
                     ->end()
                 ->end()
                 ->end()

@@ -23,6 +23,7 @@ before_script:
 
 script:
     - bin/phpspec run -f dot
+    - phpunit
 
 notifications:
     email: "willemsen.christophe@gmail.com"

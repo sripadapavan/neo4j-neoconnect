@@ -28,6 +28,18 @@ class NeoConnectExtension implements ExtensionInterface
         foreach ($config['connection'] as $key => $value) {
             $container->setParameter($this->getAlias() . '.connection.' . $key, $value);
         }
+        foreach ($config['transaction'] as $key => $value) {
+            if (!is_array($value)) {
+                $container->setParameter($this->getAlias() . '.transaction.' . $key, $value);
+            }
+
+        }
+        foreach ($config['transaction']['commit_strategy'] as $key => $value) {
+            if (!is_array($value)) {
+                $container->setParameter($this->getAlias() . '.transaction.commit_strategy.' . $key, $value);
+            }
+
+        }
 
         $loader = new YamlFileLoader(
             $container,
