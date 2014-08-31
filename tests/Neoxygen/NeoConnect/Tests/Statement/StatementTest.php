@@ -4,7 +4,7 @@ namespace Neoxygen\NeoConnect\Tests\Statement;
 
 use Neoxygen\NeoConnect\Statement\Statement;
 
-class DataEndpointTest extends \PHPUnit_Framework_TestCase
+class StatementTest extends \PHPUnit_Framework_TestCase
 {
     public function testItAcceptsQueryAndParametersOnConstruct()
     {
