@@ -51,7 +51,9 @@ class StackManager
     {
         $statements = array('statements' => array());
         foreach ($this->getStatements() as $statement) {
-            $sts['statements'][] = $statement->prepare();
+            $statements['statements'][] = $statement->prepare();
         }
+
+        return $statements;
     }
 }
