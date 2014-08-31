@@ -32,7 +32,7 @@ class ConfigurationCommand extends Command
         $connection = ConnectionBuilder::create()->build();
 
         $neo4jVersion = $connection->getNeo4jVersion();
-        $output->writeln('<info>NeoConnect Console v0.1-dev | Neo4j Version : ' . $neo4jVersion . '</info>');
+        $output->writeln('<info>NeoConnect Console v0.4-dev | Neo4j Version : ' . $neo4jVersion . '</info>');
 
         $params = $connection->getParameters();
         $table = $this->getHelper('table');

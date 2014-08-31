@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-define('NEOCONNECT_VERSION', '2.1-dev');
+define('NEOCONNECT_VERSION', '0.4-dev');
 
 if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
     require $autoload;
