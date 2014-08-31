@@ -30,7 +30,7 @@ class ManagementEndpoint
     /**
      * @param mixed $services
      */
-    public function setServices($services)
+    public function setServices(array $services)
     {
         $this->services = $services;
     }
