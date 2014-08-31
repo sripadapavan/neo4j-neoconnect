@@ -1,5 +1,0 @@
-Neoxygen\NeoConnect\Tests\ConnectionBuilder
- [x] Create factory
- [x] Create instantiate http client
- [x] Parameter bag is not resolved when create
-
