@@ -8,7 +8,7 @@
  * @license MIT License
  */
 
-namespace Neoxygen\NeoConnect\Transaction;
+namespace Neoxygen\NeoConnect\Statement;
 
 class Statement
 {

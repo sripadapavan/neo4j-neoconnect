@@ -31,9 +31,17 @@ class NeoConnectExtension implements ExtensionInterface
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__.'/../Resources/config')
+            new FileLocator(__DIR__.'/../Resources/config/services')
         );
         $loader->load('services.yml');
+
+        // Defining Commit Strategy
+        $commitStrategy = $config['transaction']['commit_strategy']['strategy'];
+        if ('custom' !== $commitStrategy) {
+            $loader->load('commit_strategy/' . $commitStrategy . '.yml');
+        }
+        $container->setAlias('neoconnect.commit_strategy', $config['service']['commit_strategy_' . $commitStrategy]);
+
     }
 
     public function getAlias()

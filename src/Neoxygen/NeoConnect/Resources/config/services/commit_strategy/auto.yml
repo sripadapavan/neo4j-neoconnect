@@ -1,0 +1,6 @@
+parameters:
+  neoconnect.transaction.commit_strategy.auto_commit_strategy.class: Neoxygen\NeoConnect\Transaction\Strategy\AutoCommitStrategy
+
+services:
+  neoconnect.transaction.auto_commit_strategy:
+    class: "%neoconnect.transaction.commit_strategy.auto_commit_strategy.class%"

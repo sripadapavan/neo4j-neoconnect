@@ -31,9 +31,9 @@ class Connection implements ConnectionInterface
      */
     public function sendCypherQuery($query, array $parameters = array())
     {
-        $tm = $this->getTransactionManager();
+        $this->getStackManager()->createStatement($query, $parameters);
 
-        return $tm->createStatement($query, $parameters);
+        return $this->getTransactionManager()->handleStackCommit();
     }
 
     /**
@@ -84,5 +84,10 @@ class Connection implements ConnectionInterface
     private function getService($alias)
     {
         return $this->serviceContainer->get($alias);
+    }
+
+    private function getStackManager()
+    {
+        return $this->getService('neoconnect.stack_manager');
     }
 }
