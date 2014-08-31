@@ -17,10 +17,7 @@
         "symfony/yaml" : "~2.5@dev",
         "symfony/config" : "~2.5@dev",
         "symfony/dependency-injection" : "~2.5@dev",
-        "symfony/templating" : "~2.5@dev",
         "symfony/event-dispatcher" : "~2.5@dev",
-        "symfony/stopwatch" : "~2.5@dev",
-        "symfony/filesystem" : "~2.5@dev",
         "guzzlehttp/guzzle" : "4.*",
         "jms/serializer": "0.17.*@dev",
         "doctrine/collections": "1.2.*@dev"
