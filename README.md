@@ -1,6 +1,11 @@
 # NeoConnect
 ## Full-featured and flexible Neo4j ReST API Client for PHP
 
+[![Build Status](https://travis-ci.org/neoxygen/neo4j-neoconnect.svg?branch=master)](https://travis-ci.org/neoxygen/neo4j-neoconnect)
+[![Total Downloads](https://poser.pugx.org/neoxygen/neoconnect/downloads.svg)](https://packagist.org/packages/neoxygen/neoconnect)
+[![Latest Unstable Version](https://poser.pugx.org/neoxygen/neoconnect/v/unstable.svg)](https://packagist.org/packages/neoxygen/neoconnect)
+[![License](https://poser.pugx.org/neoxygen/neoconnect/license.svg)](https://packagist.org/packages/neoxygen/neoconnect)
+
 ### Foreword
 
 This library aims to provide a powerful Neo4j api client. Following features are included :
