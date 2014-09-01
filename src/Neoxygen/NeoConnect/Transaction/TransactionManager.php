@@ -65,33 +65,22 @@ class TransactionManager implements TransactionManagerInterface
 
             return $response;
         }
-    }
 
-    /**
-     * @param null $stackFlushLimit
-     */
-    public function setStackFlushLimit($stackFlushLimit)
-    {
-        $this->stackFlushLimit = $stackFlushLimit;
+        return false;
     }
 
     public function begin()
     {
-
-    }
-
-    public function executeStatement()
-    {
-
+        return true;
     }
 
     public function rollback()
     {
-
+        return true;
     }
 
     public function commit()
     {
-
+        return true;
     }
 }
