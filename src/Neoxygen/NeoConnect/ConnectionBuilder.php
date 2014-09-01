@@ -13,7 +13,7 @@ namespace Neoxygen\NeoConnect;
 use Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\DependencyInjection\NeoConnectExtension,
     Neoxygen\NeoConnect\EventListener\DefaultHeadersListener,
-    Neoxygen\NeoConnect\EventSubscriber\LoggingEventSubscriber;
+    Neoxygen\NeoConnect\EventSubscriber\BodyEncodingEventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Psr\Log\LoggerInterface;
@@ -51,7 +51,9 @@ class ConnectionBuilder
         $this->registerDefaultListeners();
         $dispatcher = $this->getContainer()->get('neoconnect.event_dispatcher');
         $logging_subscriber = $this->getContainer()->get('neoconnect.logging_event_subscriber');
+        $body_encoding_subscriber = new BodyEncodingEventSubscriber();
         $dispatcher->addSubscriber($logging_subscriber);
+        $dispatcher->addSubscriber($body_encoding_subscriber);
 
         if ($this->loggerRegistered) {
             $this->serviceContainer->get('neoconnect.logger')->setLogger($this->customLogger);

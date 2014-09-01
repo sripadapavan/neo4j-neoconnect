@@ -13,7 +13,10 @@ namespace Neoxygen\NeoConnect\Transaction;
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Api\Discovery,
     Neoxygen\NeoConnect\Statement\StackManager,
-    Neoxygen\NeoConnect\Transaction\Strategy\CommitStrategyInterface;
+    Neoxygen\NeoConnect\Transaction\Strategy\CommitStrategyInterface,
+    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher,
+    Neoxygen\NeoConnect\Event\GenericLoggingEvent;
+use Neoxygen\NeoConnect\NeoConnectEvents;
 
 class TransactionManager implements TransactionManagerInterface
 {
@@ -21,6 +24,7 @@ class TransactionManager implements TransactionManagerInterface
     protected $httpClient;
     protected $apiDiscovery;
     protected $stackManager;
+    protected $dispatcher;
 
     /**
      * @param string              $commitStrategy
@@ -31,12 +35,14 @@ class TransactionManager implements TransactionManagerInterface
         StackManager $stackManager,
         CommitStrategyInterface $commitStrategy,
         HttpClientInterface $httpClient,
-        Discovery $apiDiscovery)
+        Discovery $apiDiscovery,
+        EventDispatcher $dispatcher)
     {
         $this->commitStrategy = $commitStrategy;
         $this->httpClient = $httpClient;
         $this->apiDiscovery = $apiDiscovery;
         $this->stackManager = $stackManager;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -59,7 +65,11 @@ class TransactionManager implements TransactionManagerInterface
             $requestBody = $this->getStackManager()->prepareStatementsForFlush();
             $url = $this->apiDiscovery->getDataEndpoint()->getTransaction().'/commit';
 
+            $this->logEvent('info', 'Stack Flush Init - Flushing '.$stack->count().' statement(s)');
+
             $response = $this->httpClient->send('POST', $url, $requestBody);
+
+            $this->logEvent('info', 'Stack Flush Completed');
 
             return $response;
         }
@@ -80,5 +90,12 @@ class TransactionManager implements TransactionManagerInterface
     public function commit()
     {
         return true;
+    }
+
+    private function logEvent($level, $message)
+    {
+        $event = new GenericLoggingEvent($message, $level);
+
+        return $this->dispatcher->dispatch(NeoConnectEvents::GENERIC_LOGGING, $event);
     }
 }

@@ -20,7 +20,6 @@ services:
       - "@neoconnect.commit_strategy"
       - "@neoconnect.http_client"
       - "@neoconnect.api_discovery"
-      - "@neoconnect.deserializer"
       - "@neoconnect.event_dispatcher"
 
   neoconnect.stack_manager:
