@@ -113,11 +113,34 @@ Transactions settings are on the roadmap. The following functionnalities are pla
 
 ### Events
 
-To be written
+`NeoConnect` dispatches a lot of events during the process, you can add event listeners or subscribers to these events.
+
+For a complete list of the dispatched Events, take a look at the `Neoxygen\NeoConnect\NeoConnectEvents` class.
 
 ### Logging
 
-To be written
+The library has a Special `LoggingEventSubscriber` that will listen and log all events relating to the usage of the database.
+
+You can register your own logging system to benefit from the logging events.
+
+For e.g. using Monolog as a Logging Interface :
+
+```php
+use Monolog\Logger,
+    Monolog\Handler\StreamHandler;
+use Neoxygen\NeoConnect\ConnectionBuilder;
+
+$log = new Logger('my_logger');
+$handler = new StreamHandler('/path/to/my/log/file.log', Logger::DEBUG);
+$log->pushHandler($handler);
+
+// Building the connection and registering the logger :
+$conn = ConnectionBuilder::create()
+        ->registerLogger($log)
+        ->build();
+```
+
+You will now have a full debug logging to your system with request times ;-)
 
 ### Debug Mode
 
