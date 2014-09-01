@@ -7,6 +7,8 @@
 [![Coverage Status](https://img.shields.io/coveralls/neoxygen/neo4j-neoconnect.svg)](https://coveralls.io/r/neoxygen/neo4j-neoconnect)
 [![License](https://poser.pugx.org/neoxygen/neoconnect/license.svg)](https://packagist.org/packages/neoxygen/neoconnect)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/30475e8e-e583-4aa8-a971-0c7a3e3fb144/big.png)](https://insight.sensiolabs.com/projects/30475e8e-e583-4aa8-a971-0c7a3e3fb144)
+
 ### Foreword
 
 This library aims to provide a powerful Neo4j api client. Following features are included :
