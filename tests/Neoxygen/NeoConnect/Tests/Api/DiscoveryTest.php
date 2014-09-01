@@ -5,7 +5,8 @@ namespace Neoxygen\NeoConnect\Tests\Api;
 use Neoxygen\NeoConnect\ConnectionBuilder,
     Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\Statement\StackManager,
-    Neoxygen\NeoConnect\Api\Discovery;
+    Neoxygen\NeoConnect\Api\Discovery,
+    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher;
 
 class DiscoveryTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,8 +73,9 @@ class DiscoveryTest extends \PHPUnit_Framework_TestCase
         $conn = $this->build();
         $httpClient = $this->getService('neoconnect.http_client');
         $deserializer = $this->getService('neoconnect.deserializer');
+        $dispatcher = new EventDispatcher();
 
-        return new Discovery($httpClient, $deserializer);
+        return new Discovery($httpClient, $deserializer, $dispatcher);
     }
 
     private function getService($alias)

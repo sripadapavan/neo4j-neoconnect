@@ -18,18 +18,30 @@ class Logger
         return $this->logger;
     }
 
+    public function processLog($level, $message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->log($level, $message, $context);
+        }
+    }
+
     public function debug($message, array $info = array())
     {
-        return $this->logger->debug($message, $info);
+        return $this->processLog('debug', $message, $info);
     }
 
     public function info($message, array $info = array())
     {
-        return $this->logger->info($message, $info);
+        return $this->processLog('info', $message, $info);
     }
 
     public function emergency($message, array $info = array())
     {
-        return $this->logger->emergency($message, $info);
+        return $this->processLog('emergency', $message, $info);
+    }
+
+    public function log($level, $message, array $context = array())
+    {
+        return $this->processLog($level, $message, $context);
     }
 }

@@ -13,7 +13,10 @@ namespace Neoxygen\NeoConnect\Api;
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Deserializer\Deserializer,
     Neoxygen\NeoConnect\Deserializer\Api\RootEndpoint,
-    Neoxygen\NeoConnect\Deserializer\Api\DataEndpoint;
+    Neoxygen\NeoConnect\Deserializer\Api\DataEndpoint,
+    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher,
+    Neoxygen\NeoConnect\Event\GenericLoggingEvent;
+use Neoxygen\NeoConnect\NeoConnectEvents;
 
 class Discovery
 {
@@ -22,16 +25,18 @@ class Discovery
     private $data;
     private $client;
     private $deserializer;
+    private $dispatcher;
 
     /**
      * @param  HttpClientInterface               $client
      * @param  Deserializer                      $deserializer
      * @return Neoxygen\NeoConnect\Api\Discovery
      */
-    public function __construct(HttpClientInterface $client, Deserializer $deserializer)
+    public function __construct(HttpClientInterface $client, Deserializer $deserializer, EventDispatcher $dispatcher)
     {
         $this->client = $client;
         $this->deserializer = $deserializer;
+        $this->dispatcher = $dispatcher;
 
         return $this;
     }
@@ -41,9 +46,17 @@ class Discovery
      */
     public function processApiDiscovery()
     {
+        $this->logGenericEvent('Processing Root Endpoint Discovery');
         $this->root = $this->discoverRootEndpoint();
+        $this->logGenericEvent('Root Endpoint Discovery Completed');
+
+        $this->logGenericEvent('Processing Mangement Endpoint Discovery');
         $this->management = $this->discoverManagementEndpoint($this->root);
+        $this->logGenericEvent('Management Endpoint Discovery Completed');
+
+        $this->logGenericEvent('Processing Data Endpoint Discovery');
         $this->data = $this->discoverDataEndpoint($this->root);
+        $this->logGenericEvent('Data Endpoint Discovery Completed');
 
         return $this;
     }
@@ -113,5 +126,11 @@ class Discovery
         $response = $this->client->send('GET', $root->getData());
 
         return $this->deserializer->deserializeDataEndpoint($response);
+    }
+
+    private function logGenericEvent($message)
+    {
+        $event = new GenericLoggingEvent($message);
+        $this->dispatcher->dispatch(NeoConnectEvents::GENERIC_LOGGING, $event);
     }
 }

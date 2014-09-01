@@ -16,17 +16,15 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $handler = new StreamHandler($handle);
         $handler->setFormatter($this->getIdentityFormatter());
 
-        $observer = $this->getMock('Monolog\\Logger', array('info', 'debug', 'emergency'), array('neotest'));
+        $observer = $this->getMock('Monolog\\Logger', array('log'), array('neotest'));
         $observer->pushHandler($handler);
-        $observer->expects($this->once())
-            ->method('info')
-            ->with('test', array());
-        $observer->expects($this->once())
-            ->method('debug')
-            ->with('test2', array());
-        $observer->expects($this->once())
-            ->method('emergency')
-            ->with('test3', array());
+        $observer->expects($this->exactly(3))
+            ->method('log')
+            ->withConsecutive(
+                array('info', 'test', array()),
+                array('debug', 'test2', array()),
+                array('emergency', 'test3', array())
+            );
         $ls->setLogger($observer);
         $ls->info('test', array());
         $ls->debug('test2', array());

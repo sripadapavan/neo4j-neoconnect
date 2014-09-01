@@ -27,12 +27,6 @@ class StackCommitStrategy implements CommitStrategyInterface
             return true;
         }
 
-        foreach ($stack->getStatements() as $statement) {
-            if ($statement->hasFlushTrigger()) {
-                return true;
-            }
-        }
-
         return false;
     }
 }
