@@ -85,14 +85,17 @@ class DiscoveryTest extends \PHPUnit_Framework_TestCase
         return $service;
     }
 
-    protected static function getMethod($class, $name) {
+    protected static function getMethod($class, $name)
+    {
         $class = new \ReflectionClass($class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 
-    private function getPrivateProperty( $className, $propertyName ) {
+    private function getPrivateProperty($className, $propertyName)
+    {
         $reflector = new \ReflectionClass( $className );
         $property = $reflector->getProperty( $propertyName );
         $property->setAccessible( true );
