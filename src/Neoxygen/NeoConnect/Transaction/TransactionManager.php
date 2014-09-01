@@ -12,8 +12,6 @@ namespace Neoxygen\NeoConnect\Transaction;
 
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Api\Discovery,
-    Neoxygen\NeoConnect\Statement\StatementStack,
-    Neoxygen\NeoConnect\Statement\Statement,
     Neoxygen\NeoConnect\Statement\StackManager,
     Neoxygen\NeoConnect\Transaction\Strategy\CommitStrategyInterface;
 

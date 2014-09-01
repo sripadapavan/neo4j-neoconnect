@@ -13,7 +13,6 @@ namespace Neoxygen\NeoConnect\Api;
 use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
     Neoxygen\NeoConnect\Deserializer\Deserializer,
     Neoxygen\NeoConnect\Deserializer\Api\RootEndpoint,
-    Neoxygen\NeoConnect\Deserializer\Api\ManagementEndpoint,
     Neoxygen\NeoConnect\Deserializer\Api\DataEndpoint;
 
 class Discovery
