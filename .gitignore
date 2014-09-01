@@ -6,3 +6,4 @@ bin/phpunit
 bin/coveralls
 test.php
 tests/_reports/
+build/

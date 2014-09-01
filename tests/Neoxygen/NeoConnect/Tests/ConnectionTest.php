@@ -76,6 +76,14 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Neoxygen\NeoConnect\Api\Discovery', $api);
     }
 
+    public function testItSendsCypherQuery()
+    {
+        $conn = ConnectionBuilder::create()->build();
+        $response = $conn->sendCypherQuery('MATCH (n:MySuperLabel) RETURN n', array());
+        $r = json_decode($response, true);
+        $this->assertTrue(array_key_exists('results', $r));
+    }
+
     private function buildDefault()
     {
         return ConnectionBuilder::create()->build();
