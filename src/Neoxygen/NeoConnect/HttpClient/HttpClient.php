@@ -14,7 +14,9 @@ use GuzzleHttp\Client;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Neoxygen\NeoConnect\Event\PreRequestSendEvent,
     Neoxygen\NeoConnect\Event\PostRequestSendEvent,
-    Neoxygen\NeoConnect\NeoConnectEvents;
+    Neoxygen\NeoConnect\Event\PreRequestCreateEvent,
+    Neoxygen\NeoConnect\NeoConnectEvents,
+    Neoxygen\NeoConnect\HttpClient\Request;
 
 class HttpClient implements HttpClientInterface
 {
@@ -33,10 +35,18 @@ class HttpClient implements HttpClientInterface
     {
         $uri = null !== $url ? (string) $url : $this->baseUrl;
 
-        // Will be change further with Event PRE_REQUEST_CREATE passing url, body and defaults
-        $body = json_encode($body);
+        $request = new Request($method, $uri, $body, $defaults);
 
-        $request = $this->client->createRequest($method, $uri, ['timeout' => 5, 'body' => $body]);
+        $prcEvent = new PreRequestCreateEvent($request);
+        $this->eventDispatcher->dispatch(NeoConnectEvents::PRE_REQUEST_CREATE, $prcEvent);
+
+        $request = $this->client->createRequest(
+            $request->getMethod(),
+            $request->getUrl(),
+            [
+                'body' => $request->getBody(),
+            ]
+        );
 
         $event = new PreRequestSendEvent($request);
 
