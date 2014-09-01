@@ -81,10 +81,12 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         return ConnectionBuilder::create()->build();
     }
 
-    protected static function getMethod($name) {
+    protected static function getMethod($name)
+    {
         $class = new \ReflectionClass('Neoxygen\NeoConnect\Connection');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 }
