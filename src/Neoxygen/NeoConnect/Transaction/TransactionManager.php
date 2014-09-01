@@ -20,7 +20,6 @@ use Neoxygen\NeoConnect\HttpClient\HttpClientInterface,
 class TransactionManager implements TransactionManagerInterface
 {
     protected $commitStrategy;
-    protected $stackFlushLimit;
     protected $httpClient;
     protected $apiDiscovery;
     protected $stackManager;
@@ -48,22 +47,6 @@ class TransactionManager implements TransactionManagerInterface
     public function getCommitStrategy()
     {
         return $this->commitStrategy;
-    }
-
-    /**
-     * @param string $commitStrategy
-     */
-    public function setCommitStrategy($commitStrategy)
-    {
-        $this->commitStrategy = $commitStrategy;
-    }
-
-    /**
-     * @return null
-     */
-    public function getStackFlushLimit()
-    {
-        return $this->stackFlushLimit;
     }
 
     public function getStackManager()
