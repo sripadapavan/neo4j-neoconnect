@@ -60,7 +60,7 @@ class TransactionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('results', $r));
     }
 
-    private  function getInstance()
+    private function getInstance()
     {
         $eventDispatcher = new EventDispatcher();
         $client = new HttpClient('http', 'localhost', 7474, $eventDispatcher);
