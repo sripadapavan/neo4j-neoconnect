@@ -12,7 +12,6 @@ namespace Neoxygen\NeoConnect\Deserializer;
 
 use JMS\Serializer\SerializerBuilder;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Neoxygen\NeoConnect\Deserializer\Api\RootEndpoint;
 
 class Deserializer
 {
@@ -63,7 +62,6 @@ class Deserializer
      */
     public function deserializeDataEndpoint($json)
     {
-        //var_dump($json);
         return $this->deserialize($json, 'Neoxygen\NeoConnect\Deserializer\Api\DataEndpoint');
     }
 }

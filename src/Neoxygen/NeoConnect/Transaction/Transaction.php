@@ -11,6 +11,7 @@
 namespace Neoxygen\NeoConnect\Transaction;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Neoxygen\NeoConnect\Statement\Statement;
 
 class Transaction
 {
