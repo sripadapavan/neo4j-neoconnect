@@ -11,7 +11,7 @@ services:
 
   neoconnect.api_discovery:
     class: "Neoxygen\\NeoConnect\\Api\\Discovery"
-    arguments: ["@neoconnect.http_client", "@neoconnect.deserializer"]
+    arguments: ["@neoconnect.http_client", "@neoconnect.deserializer", "@neoconnect.event_dispatcher"]
 
   neoconnect.transaction_manager:
     class: "Neoxygen\\NeoConnect\\Transaction\\TransactionManager"
@@ -29,3 +29,7 @@ services:
 
   neoconnect.logger:
     class: "Neoxygen\\NeoConnect\\Logger\\Logger"
+
+  neoconnect.logging_event_subscriber:
+    class: "Neoxygen\\NeoConnect\\EventSubscriber\\LoggingEventSubscriber"
+    arguments: ["@neoconnect.logger"]

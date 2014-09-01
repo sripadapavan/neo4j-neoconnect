@@ -32,4 +32,9 @@ class Logger
     {
         return $this->logger->emergency($message, $info);
     }
+
+    public function log($level, $message, array $context = array())
+    {
+        return $this->logger->log($level, $message, $context);
+    }
 }

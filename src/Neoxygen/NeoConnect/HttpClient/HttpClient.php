@@ -41,11 +41,10 @@ class HttpClient implements HttpClientInterface
         $event = new PreRequestSendEvent($request);
 
         $this->eventDispatcher->dispatch(NeoConnectEvents::PRE_REQUEST_SEND, $event);
-
+        $start = microtime(true);
         $response = $this->client->send($request);
-
-        $postSendEvent = new PostRequestSendEvent($response);
-
+        $end = microtime(true);
+        $postSendEvent = new PostRequestSendEvent($response, $start, $end);
         $this->eventDispatcher->dispatch(NeoConnectEvents::POST_REQUEST_SEND, $postSendEvent);
 
         return (string) $response->getBody();
