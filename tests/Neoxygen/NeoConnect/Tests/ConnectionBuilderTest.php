@@ -3,6 +3,8 @@
 namespace Neoxygen\NeoConnect\Tests;
 
 use Neoxygen\NeoConnect\ConnectionBuilder;
+use Monolog\Logger,
+    Monolog\Handler\SyslogHandler;
 
 class ConnectionBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,6 +69,19 @@ class ConnectionBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $builder->loadConfiguration($config2);
         $this->assertEquals($config2, $builder->getConfiguration());
+    }
+
+    public function testLoggerIsRegistered()
+    {
+        $log = new Logger('neoconnect');
+        $handler = new SyslogHandler('my_facility', 'local6');
+        $log->pushHandler($handler);
+
+        $conn = ConnectionBuilder::create()
+            ->registerLogger($log)
+            ->build();
+        $ls = $conn->getLoggerService();
+        $this->assertEquals($log, $ls->getLogger());
     }
 
     private function getCreateFactory()

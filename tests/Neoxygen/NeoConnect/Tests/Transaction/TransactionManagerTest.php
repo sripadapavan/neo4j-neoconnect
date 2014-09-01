@@ -64,7 +64,7 @@ class TransactionManagerTest extends \PHPUnit_Framework_TestCase
     {
         $eventDispatcher = new EventDispatcher();
         $client = new HttpClient('http', 'localhost', 7474, $eventDispatcher);
-        $sm = new StackManager();
+        $sm = new StackManager($eventDispatcher);
         $deserializer = new Deserializer();
         $api = new Discovery($client, $deserializer);
         $dataE = new DataEndpoint();

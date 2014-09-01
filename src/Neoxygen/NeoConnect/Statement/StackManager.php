@@ -10,16 +10,21 @@
 
 namespace Neoxygen\NeoConnect\Statement;
 
+use Neoxygen\NeoConnect\NeoConnectEvents;
 use Neoxygen\NeoConnect\Statement\StatementStack,
-    Neoxygen\NeoConnect\Statement\Statement;
+    Neoxygen\NeoConnect\Statement\Statement,
+    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher,
+    Neoxygen\NeoConnect\Event\PreQueryAddedToStackEvent;
 
 class StackManager
 {
     protected $stack;
+    protected $dispatcher;
 
-    public function __construct()
+    public function __construct(EventDispatcher $dispatcher)
     {
         $this->stack = new StatementStack();
+        $this->dispatcher = $dispatcher;
     }
 
     public function getStack()
@@ -42,6 +47,10 @@ class StackManager
     public function createStatement($statement, array $parameters = array())
     {
         $statement = new Statement($statement, $parameters);
+
+        $preAddEvent = new PreQueryAddedToStackEvent($statement);
+        $this->dispatcher->dispatch(NeoConnectEvents::PRE_QUERY_ADD_TO_STACK, $preAddEvent);
+
         $this->addStatement($statement);
 
         return $this;

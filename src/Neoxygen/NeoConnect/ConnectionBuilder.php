@@ -15,11 +15,14 @@ use Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\EventListener\DefaultHeadersListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Psr\Log\LoggerInterface;
 
 class ConnectionBuilder
 {
     private $configuration;
     private $serviceContainer;
+    private $loggerRegistered;
+    private $customLogger;
 
     public function __construct()
     {
@@ -46,6 +49,9 @@ class ConnectionBuilder
         $this->compileContainer();
         $this->registerDefaultListeners();
 
+        if ($this->loggerRegistered) {
+            $this->serviceContainer->get('neoconnect.logger')->setLogger($this->customLogger);
+        }
         // Process Neo4j Api Discovery
         $this->serviceContainer->get('neoconnect.api_discovery')->processApiDiscovery();
 
@@ -55,6 +61,14 @@ class ConnectionBuilder
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    public function registerLogger(LoggerInterface $logger)
+    {
+        $this->customLogger = $logger;
+        $this->loggerRegistered = true;
+
+        return $this;
     }
 
     private function registerDefaultExtensions()

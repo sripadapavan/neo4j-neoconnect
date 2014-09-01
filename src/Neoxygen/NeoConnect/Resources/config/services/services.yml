@@ -25,3 +25,7 @@ services:
 
   neoconnect.stack_manager:
     class: "Neoxygen\\NeoConnect\\Statement\\StackManager"
+    arguments: ["@neoconnect.event_dispatcher"]
+
+  neoconnect.logger:
+    class: "Neoxygen\\NeoConnect\\Logger\\Logger"
