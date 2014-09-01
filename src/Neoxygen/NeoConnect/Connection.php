@@ -77,6 +77,11 @@ class Connection implements ConnectionInterface
         return $this->getService('neoconnect.transaction_manager');
     }
 
+    public function getLoggerService()
+    {
+        return $this->getService('neoconnect.logger');
+    }
+
     /**
      * @param $alias
      * @return mixed

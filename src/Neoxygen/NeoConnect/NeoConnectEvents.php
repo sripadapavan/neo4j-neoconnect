@@ -15,4 +15,8 @@ final class NeoConnectEvents
     const PRE_REQUEST_SEND = 'pre_request.send';
 
     const POST_REQUEST_SEND = 'post.request_send';
+
+    const PRE_QUERY_ADD_TO_STACK = 'pre.query_add_to_stack';
+
+    const PRE_PREPARE_STATEMENTS_FOR_FLUSH = 'pre.prepare_statements_for_flush';
 }
