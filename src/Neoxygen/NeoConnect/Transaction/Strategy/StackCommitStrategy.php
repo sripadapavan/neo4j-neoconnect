@@ -10,23 +10,43 @@
 
 namespace Neoxygen\NeoConnect\Transaction\Strategy;
 
-use Neoxygen\NeoConnect\Statement\StatementStack;
+use Neoxygen\NeoConnect\Statement\StatementStack,
+    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher,
+    Neoxygen\NeoConnect\Event\GenericLoggingEvent,
+    Neoxygen\NeoConnect\NeoConnectEvents;
 
 class StackCommitStrategy implements CommitStrategyInterface
 {
-    protected $stackFlushLimit;
+    protected $dispatcher;
 
-    public function __construct($stackFlushLimit)
+    public function __construct(EventDispatcher $dispatcher)
     {
-        $this->stackFlushLimit = $stackFlushLimit;
+        $this->dispatcher = $dispatcher;
     }
 
     public function shouldBeFlushed(StatementStack $stack)
     {
-        if ($stack->count() >= $this->stackFlushLimit) {
-            return true;
+        foreach ($stack->getStatements() as $statement) {
+            if ($statement->hasFlushTrigger()) {
+                $this->log('FlushTrigger found');
+
+                return true;
+            }
         }
+        $this->log('No FlushTrigger found');
 
         return false;
+    }
+
+    public function log($message, $level = 'debug')
+    {
+        $event = new GenericLoggingEvent($message, $level);
+
+        return $this->dispatcher->dispatch(NeoConnectEvents::GENERIC_LOGGING, $event);
+    }
+
+    public function __toString()
+    {
+        return 'Stack';
     }
 }

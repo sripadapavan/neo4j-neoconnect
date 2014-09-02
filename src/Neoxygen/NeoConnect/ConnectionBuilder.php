@@ -16,7 +16,8 @@ use Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber,
     Neoxygen\NeoConnect\EventSubscriber\BodyEncodingEventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+    Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
+    Symfony\Component\Yaml\Yaml;
 use Psr\Log\LoggerInterface;
 
 class ConnectionBuilder
@@ -45,6 +46,18 @@ class ConnectionBuilder
         $this->configuration = array_merge($configuration, $config);
 
         return $this;
+    }
+
+    public function loadConfigurationFromFile($file)
+    {
+        if(!file_exists($file)) {
+            throw new \InvalidArgumentException('The file '.$file.' can not be found');
+        }
+        $config = Yaml::parse($file);
+        $this->configuration = $config;
+
+        return $this;
+
     }
 
     public function build()

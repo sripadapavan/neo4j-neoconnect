@@ -20,4 +20,9 @@ class AutoCommitStrategy implements CommitStrategyInterface
             return true;
         }
     }
+
+    public function __toString()
+    {
+        return 'Auto';
+    }
 }

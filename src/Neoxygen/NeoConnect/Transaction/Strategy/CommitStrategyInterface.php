@@ -15,4 +15,5 @@ use Neoxygen\NeoConnect\Statement\StatementStack;
 interface CommitStrategyInterface
 {
     public function shouldBeFlushed(StatementStack $stack);
+    public function __toString();
 }

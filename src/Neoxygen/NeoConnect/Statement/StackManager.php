@@ -44,9 +44,12 @@ class StackManager
         return $this;
     }
 
-    public function createStatement($statement, array $parameters = array())
+    public function createStatement($statement, array $parameters = array(), $flushTrigger = false)
     {
         $statement = new Statement($statement, $parameters);
+        if ($flushTrigger) {
+            $statement->setFlushTrigger();
+        }
 
         $preAddEvent = new PreQueryAddedToStackEvent($statement);
         $this->dispatcher->dispatch(NeoConnectEvents::PRE_QUERY_ADD_TO_STACK, $preAddEvent);
