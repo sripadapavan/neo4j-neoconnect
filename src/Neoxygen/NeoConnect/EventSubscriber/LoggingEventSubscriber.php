@@ -14,10 +14,10 @@ use Neoxygen\NeoConnect\Event\PreQueryAddedToStackEvent,
     Neoxygen\NeoConnect\Event\PreRequestSendEvent,
     Neoxygen\NeoConnect\Event\PostRequestSendEvent,
     Neoxygen\NeoConnect\Event\GenericLoggingEvent,
-    Neoxygen\NeoConnect\Logger\Logger;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+    Neoxygen\NeoConnect\Logger\Logger,
+    Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber;
 
-class LoggingEventSubscriber implements EventSubscriberInterface
+class LoggingEventSubscriber extends BaseEventSubscriber
 {
     protected $logger;
 

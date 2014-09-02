@@ -10,10 +10,10 @@
 
 namespace Neoxygen\NeoConnect\EventSubscriber;
 
-use Neoxygen\NeoConnect\Event\PreRequestCreateEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Neoxygen\NeoConnect\Event\PreRequestCreateEvent,
+    Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber;
 
-class BodyEncodingEventSubscriber implements EventSubscriberInterface
+class BodyEncodingEventSubscriber extends BaseEventSubscriber
 {
 
     public static function getSubscribedEvents()
@@ -31,7 +31,6 @@ class BodyEncodingEventSubscriber implements EventSubscriberInterface
             $body = $event->getRequest()->getBody();
             $event->getRequest()->setBody(json_encode($body));
         }
-
 
     }
 }

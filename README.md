@@ -117,6 +117,69 @@ Transactions settings are on the roadmap. The following functionnalities are pla
 
 For a complete list of the dispatched Events, take a look at the `Neoxygen\NeoConnect\NeoConnectEvents` class.
 
+### Registering Event Subscribers
+
+You can register your own EventSubscribers to hook in the `NeoConnect` Event System.
+
+1. Create your CustomEventSubscriberClass, this class should extend `Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber`
+and implement the public static function `getSubscribedEvents`
+
+You may for example want to ensure that a statement contains always a `graph` result data content and you also want
+to replace all create clauses by the merge clauses (this is an example :) )
+
+By hooking the `PRE_QUERY_ADD_TO_STACK` Event, you can have access to the statement and modify it :
+
+```php
+namespace Acme\EventSubscriber\MyEventSubscriber;
+
+use Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber,
+    Neoxygen\NeoConnect\Event\PreQueryAddToStackEvent;
+
+class CustomEventSubscriber extends BaseEventSubscriber
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'pre.query_add_to_stack' => array(
+                array('verifyGraphResultDataContentIsSet', 20),
+                array('replaceCreateByMerge', 10)
+            )
+        );
+    }
+
+    public function verifyGraphResultDataContentIsSet(PreQueryAddedToStackEvent $event)
+    {
+        $statement = $event->getStatement();
+        if (!in_array('graph', $statement->getResultDataContents())) {
+            $result = $statement->getResultDataContents();
+            array_push($result, 'graph');
+            $statement->setResultDataContents($result);
+
+        }
+    }
+
+    public function replaceCreateByMerge(PreQueryAddedToStackEvent $event)
+    {
+        $statement = $event->getStatement();
+        $q = $statement->getStatement();
+        $newQuery = str_replace('CREATE', 'MERGE', $q);
+        $statement->setStatement($newQuery);
+    }
+```
+
+You can now register this subscriber when building your connection :
+
+```php
+use Acme\EventSubscriber\CustomEventSubscriber;
+use Neoxygen\NeoConnect\ConnectionBuilder;
+
+$myCustomSubscriber = new CustomEventSubscriber();
+$connection = ConnectionBuilder::create()
+              ->addEventSubscriber($myCustomSubscriber)
+              ->build();
+
+```
+
 ### Logging
 
 The library has a Special `LoggingEventSubscriber` that will listen and log all events relating to the usage of the database.
