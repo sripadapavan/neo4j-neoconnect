@@ -29,11 +29,25 @@ class Connection implements ConnectionInterface
      * @param  array  $parameters
      * @return mixed
      */
-    public function sendCypherQuery($query, array $parameters = array())
+    public function sendCypherQuery($query, $parameters = null, $flushTrigger = false)
     {
-        $this->getStackManager()->createStatement($query, $parameters);
+        $params = $parameters ? $parameters : array();
+        $this->getStackManager()->createStatement($query, $params, $flushTrigger);
 
         return $this->getTransactionManager()->handleStackCommit();
+    }
+
+    /**
+     * Aliased sendCypherQuery method for convenience when using stack commit strategy
+     *
+     * @param $query
+     * @param $parameters
+     * @param $flushTrigger
+     * @return mixed
+     */
+    public function addCypherQuery($query, $parameters, $flushTrigger)
+    {
+        return $this->sendCypherQuery($query, $parameters, $flushTrigger);
     }
 
     /**

@@ -61,6 +61,8 @@ class TransactionManager implements TransactionManagerInterface
     public function handleStackCommit()
     {
         $stack = $this->getStackManager()->getStack();
+        $this->logEvent('debug', 'Verifying if the Stack should be flushed');
+        $this->logEvent('debug', 'Calling the '.$this->commitStrategy->__toString().' Commit Strategy');
         if ($this->getCommitStrategy()->shouldBeFlushed($stack)) {
             $requestBody = $this->getStackManager()->prepareStatementsForFlush();
             $url = $this->apiDiscovery->getDataEndpoint()->getTransaction().'/commit';

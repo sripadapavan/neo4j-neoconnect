@@ -15,11 +15,13 @@ class Statement
     protected $statement;
     protected $parameters;
     protected $resultDataContents;
+    protected $flushTrigger;
 
     public function __construct($statement, array $parameters = array())
     {
         $this->setStatement($statement);
         $this->setParameters($parameters);
+        $this->flushTrigger = false;
 
         return $this;
     }
@@ -59,6 +61,16 @@ class Statement
     public function getResultDataContents()
     {
         return $this->resultDataContents;
+    }
+
+    public function setFlushTrigger()
+    {
+        $this->flushTrigger = true;
+    }
+
+    public function hasFlushTrigger()
+    {
+        return $this->flushTrigger;
     }
 
     /**

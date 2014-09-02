@@ -114,6 +114,74 @@ $labelsEndpoint = $api->getDataEndpoint()->getLabels(); // http://localhost:7474
 $transactionEndpoint = $api->getDataEndpoint()->getTransaction(); // http://localhost:7474/db/data/transaction
 ```
 
+### Commit Strategies
+
+When sending Cypher queries, it creates a statement object for each query and add it to a `StatementStack`.
+
+For each sendCypherQuery method call, the `TransactionManager` will call the xxxCommitStrategy class to determine
+if the stack should be commited or not.
+
+The library is currently shipped with two simple Commit Strategies, respectively `Auto` and `Stack`.
+
+The `AutoCommitStrategy` will commit the stack after each `sendCypherQuery` call. This is the default commit strategy.
+
+The `StackCommitStrategy` will empile the statements into the stack and wait that a statement contains a flushTrigger,
+if the trigger is found, the TransactionManager will commit the stack of statements.
+
+You can configure the stack mode when providing the configuration in the Connection Building setup :
+
+```php
+$conn = ConnectionBuilder::create()
+        ->loadConfiguration($config)
+        ->build();
+```
+
+Or with a YAML file :
+
+```yaml
+connection: ~
+transaction:
+  commit_strategy:
+    strategy: stack
+```
+
+To add a `flushTrigger` to a statement, simply add a 3rd argument to the `sendCypherQuery` method :
+
+```php
+$query1 = 'MATCH (n:MyLabel) RETURN n';
+$conn->sendCypherQuery($query1);
+$query2 = 'MATCH (n:MyOtherLabel) RETURN n';
+$conn->sendCypherQuery($query2, null, true) // <- 2nd argument is for parameters, 3rd is to set the flushTrigger
+```
+
+There is also a convenience method `addCypherQuery` when working in stack mode.
+
+By analysing the logs, you can have an idea of the whole process :
+
+```
+[2014-09-02 11:31:29] neoconnect.DEBUG: Processing Root Endpoint Discovery [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Request sent in 0.010097026824951 seconds [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Root Endpoint Discovery Completed [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Processing Mangement Endpoint Discovery [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Request sent in 0.0019969940185547 seconds [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Management Endpoint Discovery Completed [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Processing Data Endpoint Discovery [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Request sent in 0.0017061233520508 seconds [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Data Endpoint Discovery Completed [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Query added to stack {"query":"MATCH (n:Coool {id: {props}.id }) RETURN n","parameters":{"props":{"id":1409225696}}} []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Verifying if the Stack should be flushed [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Calling the Stack Commit Strategy [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: No FlushTrigger found [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Query added to stack {"query":"MATCH (n) RETURN count(n)","parameters":[]} []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Verifying if the Stack should be flushed [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: Calling the Stack Commit Strategy [] []
+[2014-09-02 11:31:29] neoconnect.DEBUG: FlushTrigger found [] []
+[2014-09-02 11:31:29] neoconnect.INFO: Stack Flush Init - Flushing 2 statement(s) [] []
+[2014-09-02 11:31:30] neoconnect.DEBUG: Request sent in 0.81385016441345 seconds [] []
+[2014-09-02 11:31:30] neoconnect.INFO: Stack Flush Completed [] []
+```
+
+Adding your custom `CommitStrategy` is on the roadmap.
 
 ### Deserializer
 

@@ -57,12 +57,16 @@ class Configuration implements ConfigurationInterface
                 ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'custom'
                 && empty($v['commit_strategy']['class']);})
                 ->thenInvalid("You need to specify your custom commit strategy class")
-            ->end()
+            ->end();
+            /**
+             * Will be implemented further
+             *
             ->validate()
                 ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'stack'
                 && empty($v['commit_strategy']['stack_flush_limit']);})
                 ->thenInvalid('You need to specify a value for "stack_flush_limit" when using Stack Commit Strategy')
             ->end();
+             * */
 
         $this->addServiceSection($rootNode);
 
