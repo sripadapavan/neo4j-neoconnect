@@ -35,7 +35,7 @@ class ConfigurationCommand extends Command
         $params = $connection->getParameters();
         $table = $this->getHelper('table');
         $table->setHeaders(array('Parameter Name', 'Value'));
-        foreach ($params->all() as $k => $v) {
+        foreach ($params as $k => $v) {
             $table->addRow(
                     array($k, $v)
                 );

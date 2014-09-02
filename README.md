@@ -66,6 +66,23 @@ $connection = ConnectionBuilder::create()
                 ->build();
 ```
 
+Or you maybe want to put your configuration in a `Yaml` file :
+
+```yaml
+#/Users/kwattro/my_app/config/neoconnect_config.yml
+connection:
+  host: 192.168.56.101
+  port: 7474
+```
+
+```php
+$file = '/Users/kwattro/my_app/config/neoconnect_config.yml';
+
+$connection = ConnectionBuilder::create()
+              ->loadConfigurationFromFile($file)
+              ->build();
+```
+
 ### Sending a Cypher Query
 
 You can send easily a Cypher Query through the connection :
