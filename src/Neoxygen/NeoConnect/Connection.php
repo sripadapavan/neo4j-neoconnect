@@ -82,6 +82,11 @@ class Connection implements ConnectionInterface
         return $this->getService('neoconnect.logger');
     }
 
+    public function getEventDispatcherService()
+    {
+        return $this->getService('neoconnect.event_dispatcher');
+    }
+
     /**
      * @param $alias
      * @return mixed

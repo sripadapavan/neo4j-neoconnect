@@ -54,7 +54,7 @@ class TransactionManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete(
             'This test should be refactored.'
         );
-        
+
         $man = $this->getInstance();
         $this->assertFalse($man->handleStackCommit());
 
@@ -62,7 +62,6 @@ class TransactionManagerTest extends \PHPUnit_Framework_TestCase
         $response = $man->handleStackCommit();
         $r = json_decode($response, true);
         $this->assertTrue(array_key_exists('results', $r));
-
 
     }
 

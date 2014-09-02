@@ -13,6 +13,7 @@ namespace Neoxygen\NeoConnect;
 use Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\DependencyInjection\NeoConnectExtension,
     Neoxygen\NeoConnect\EventListener\DefaultHeadersListener,
+    Neoxygen\NeoConnect\EventSubscriber\BaseEventSubscriber,
     Neoxygen\NeoConnect\EventSubscriber\BodyEncodingEventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -24,11 +25,13 @@ class ConnectionBuilder
     private $serviceContainer;
     private $loggerRegistered;
     private $customLogger;
+    private $eventSubscribers;
 
     public function __construct()
     {
         $this->serviceContainer = new ContainerBuilder();
         $this->configuration = array();
+        $this->eventSubscribers = array();
     }
 
     public static function create()
@@ -54,6 +57,7 @@ class ConnectionBuilder
         $body_encoding_subscriber = new BodyEncodingEventSubscriber();
         $dispatcher->addSubscriber($logging_subscriber);
         $dispatcher->addSubscriber($body_encoding_subscriber);
+        $this->registerEventSubscribers();
 
         if ($this->loggerRegistered) {
             $this->serviceContainer->get('neoconnect.logger')->setLogger($this->customLogger);
@@ -75,6 +79,21 @@ class ConnectionBuilder
         $this->loggerRegistered = true;
 
         return $this;
+    }
+
+    public function addEventSubscriber(BaseEventSubscriber $subscriber)
+    {
+        $this->eventSubscribers[] = $subscriber;
+
+        return $this;
+    }
+
+    private function registerEventSubscribers()
+    {
+        $dispatcher = $this->getContainer()->get('neoconnect.event_dispatcher');
+        foreach ($this->eventSubscribers as $subscriber) {
+            $dispatcher->addSubscriber($subscriber);
+        }
     }
 
     private function registerDefaultExtensions()
