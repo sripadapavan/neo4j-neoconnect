@@ -83,6 +83,15 @@ $connection = ConnectionBuilder::create()
               ->build();
 ```
 
+If you do not want all the burden of creating the configuration file by yourself, you can use the command
+line tools available in the package and provide the path of the created file into the `loadConfigurationFromFile` method :
+
+```bash
+php bin/neoconnect config:create
+```
+
+This will create a `neoconnect_config.yml` file in your current working directory.
+
 ### Sending a Cypher Query
 
 You can send easily a Cypher Query through the connection :

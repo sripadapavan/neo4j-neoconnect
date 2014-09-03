@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c1a6416cb4cf5d2b8c526ba57a1b0a7e",
+    "hash": "da60aa954c461c4612e381c5a8c4f852",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2230,6 +2230,7 @@
         "symfony/event-dispatcher": 20,
         "jms/serializer": 20,
         "doctrine/collections": 20,
+        "symfony/filesystem": 20,
         "satooshi/php-coveralls": 20
     },
     "prefer-stable": false,
