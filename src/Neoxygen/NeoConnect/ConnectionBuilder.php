@@ -17,7 +17,8 @@ use Neoxygen\NeoConnect\Connection,
     Neoxygen\NeoConnect\EventSubscriber\BodyEncodingEventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
-    Symfony\Component\Yaml\Yaml;
+    Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 
 class ConnectionBuilder
