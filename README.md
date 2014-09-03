@@ -27,7 +27,7 @@ Installation can be done through composer :
 ```json
 {
     "require": {
-        "neoxygen/neoconnect" : "~0.3.*@dev"
+        "neoxygen/neoconnect" : "~0.4.*@dev"
     },
     "minimum-stability" : "dev",
     "config": {
