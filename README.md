@@ -36,61 +36,54 @@ Installation can be done through composer :
 }
 ```
 
-### Usage
+### Building your connection
 
-Ideally this would be done through dependency injection. Otherwise:
+Building your connection is a simple xx steps process.
 
-You can build a ```connection``` to the Neo4j databse by calling the static create&build functions :
+1. NeoConnect Settings
 
-```php
-require_once 'vendor/autoload.php';
+NeoConnect expects a `neoconnect.yml` file at the root of your project, this is where you'll define all the
+configuration for the library.
 
-use Neoxygen\NeoConnect\ConnectionBuilder;
-
-$connection = ConnectionBuilder::create()->build();
-```
-
-This will create and compile a service container referencing all the available services and configuration.
-
-You can add additional configuration settings while creating your connection :
-
-```php
-$config = array(
-    'connection' => array(
-           'host' => '192.168.2.13',
-           'port' => 7475
-           )
-       );
-$connection = ConnectionBuilder::create()
-                ->loadConfiguration($config)
-                ->build();
-```
-
-Or you maybe want to put your configuration in a `Yaml` file :
-
-```yaml
-#/Users/kwattro/my_app/config/neoconnect_config.yml
-connection:
-  host: 192.168.56.101
-  port: 7474
-```
-
-```php
-$file = '/Users/kwattro/my_app/config/neoconnect_config.yml';
-
-$connection = ConnectionBuilder::create()
-              ->loadConfigurationFromFile($file)
-              ->build();
-```
-
-If you do not want all the burden of creating the configuration file by yourself, you can use the command
-line tools available in the package and provide the path of the created file into the `loadConfigurationFromFile` method :
+A pretty console tool helps you to generate this file :
 
 ```bash
-php bin/neoconnect config:create
+$ cd /to/your/project/root
+$ bin/neoconnect config:create
 ```
 
-This will create a `neoconnect_config.yml` file in your current working directory.
+This will create a neoconnect.yml file with default configuration that you can modify to suite your project settings.
+
+2. Create the configuration bootstrap file
+
+The above generated Yaml file contains all the settings, these settings needs to be passed accordingly to NeoConnect,
+in order to facilitate this task, you can as NeoConnect to generate all the PHP code needed to perform the
+bootstrap setup of the NeoConnect settings.
+
+As above, in a simple command line :
+
+```bash
+$ bin/neoconnect config:bootstrap
+```
+
+This will create a `neoconnect_bootstrap.php` file in the `neo-conf` folder, you can specify in which folder you want
+this file to be created under the `conf_dir` key of your `neoconnect.yml` file.
+
+The end of the generated file gives you access to a $con variable that represent your current connection to the database,
+you can also change the name of this variable in the neoconnect.yml file.
+
+3. Require vendors autoloader and your connection bootstrap
+
+In your application file, require the vendors autolad and the generated bootstrap file :
+
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+require_once 'neo-conf/neoconnect_bootstrap.php';
+
+// Use the $con variable to do whatever you want with the database ;-)
+```
 
 ### Sending a Cypher Query
 
