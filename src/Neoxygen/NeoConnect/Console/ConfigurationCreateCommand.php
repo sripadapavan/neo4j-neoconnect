@@ -27,7 +27,7 @@ class ConfigurationCreateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $cwd = getcwd();
-        $cfname = 'neoconnect_config.yml';
+        $cfname = 'neoconnect.yml';
         $fs = new Filesystem();
 
         $output->writeln('<comment>
@@ -48,14 +48,14 @@ Generating Configuration File
         );
 
         $yaml = Yaml::dump($default_config);
-        if (!$fs->exists($cwd.'/neoconnect_config.yml')) {
-            $fs->copy(__DIR__.'/templates/default_config.yml.dist', $cwd.'/neoconnect_config.yml');
+        if (!$fs->exists($cwd.'/neoconnect.yml')) {
+            $fs->copy(__DIR__.'/templates/default_config.yml.dist', $cwd.'/neoconnect.yml');
             $output->writeln('<info>Created new config file "neoconnect_config.yml" in "'.$cwd.'"</info>');
         } else {
             $output->writeln('<info>Existing configuration file found !</info>');
             $helper = $this->getHelper('question');
             $question = new ChoiceQuestion(
-                '<question>Do you want to overwrite existing "neoconnect_config.yml" file ?</question> :  ',
+                '<question>Do you want to overwrite existing "neoconnect.yml" file ?</question> :  ',
                 array('y' => 'Yes', 'n' => 'No'),
                 'n'
             );
@@ -67,11 +67,11 @@ Generating Configuration File
             });
 
             if ($helper->ask($input, $output, $question) == 'Yes') {
-                $fs->remove($cwd.'/neconnect_config.yml');
+                $fs->remove($cwd.'/neconnect.yml');
                 $output->writeln('<info>Existing configuration file removed</info>');
-                $fs->touch($cwd.'/fathom_config.yml');
-                $fs->dumpFile($cwd.'/fathom_config.yml', $yaml);
-                $output->writeln('<info>Created new config file "neoconnect_config.yml" in "'.$cwd.'"</info>');
+                $fs->touch($cwd.'/neoconnect.yml');
+                $fs->dumpFile($cwd.'/neoconnect.yml', $yaml);
+                $output->writeln('<info>Created new config file "neoconnect.yml" in "'.$cwd.'"</info>');
             }
         }
     }

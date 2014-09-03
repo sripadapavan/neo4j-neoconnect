@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Connection implements ConnectionInterface
 {
+    const VERSION = '0.5.0-dev';
+
     protected $serviceContainer;
 
     /**

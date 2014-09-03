@@ -21,10 +21,12 @@ if (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
 }
 
 use Neoxygen\NeoConnect\Console\ConfigurationCommand,
-    Neoxygen\NeoConnect\Console\ConfigurationCreateCommand;
+    Neoxygen\NeoConnect\Console\ConfigurationCreateCommand,
+    Neoxygen\NeoConnect\Console\ConfigBootstrapCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new ConfigurationCommand());
 $application->add(new ConfigurationCreateCommand());
+$application->add(new ConfigBootstrapCommand());
 $application->run();
