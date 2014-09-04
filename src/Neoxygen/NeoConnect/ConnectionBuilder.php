@@ -19,6 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Extension\ExtensionInterface,
     Symfony\Component\Yaml\Yaml;
 use Psr\Log\LoggerInterface;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class ConnectionBuilder
 {
@@ -64,6 +66,16 @@ class ConnectionBuilder
     {
         $this->registerDefaultExtensions();
         $this->compileContainer();
+
+        foreach ($this->configuration['logger'] as $key => $params) {
+            $logger = new Logger($key);
+            $level = array_search(strtoupper($params['level']), Logger::getLevels());
+            $handler = new StreamHandler($params['path'], $level);
+            $logger->pushHandler($handler);
+            $logService = $this->serviceContainer->get('neoconnect.logger');
+            $logService->setLogger($logger);
+        }
+
         $this->registerDefaultListeners();
         $dispatcher = $this->getContainer()->get('neoconnect.event_dispatcher');
         $logging_subscriber = $this->getContainer()->get('neoconnect.logging_event_subscriber');

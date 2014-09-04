@@ -25,6 +25,8 @@ class NeoConnectExtension implements ExtensionInterface
         $processor = new Processor();
         $config = $processor->processConfiguration($configuration, $configs);
 
+        //print_r($config);
+
         foreach ($config['connection'] as $key => $value) {
             $container->setParameter($this->getAlias() . '.connection.' . $key, $value);
         }
@@ -53,6 +55,12 @@ class NeoConnectExtension implements ExtensionInterface
             $loader->load('commit_strategy/' . $commitStrategy . '.yml');
             $container->setAlias('neoconnect.commit_strategy', $config['service']['commit_strategy_' . $commitStrategy]);
         }
+
+        // Registering Loggers
+
+
+
+
     }
 
     public function getAlias()

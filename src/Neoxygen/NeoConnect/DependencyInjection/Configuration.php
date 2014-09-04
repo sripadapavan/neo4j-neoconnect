@@ -22,51 +22,72 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('neoconnect');
 
         $supportedCommitStrategies = array('auto', 'stack', 'custom');
+        $supportedLoggerTypes = array('stream'); // other supports in the roadmap
 
-        $rootNode->children()
-            ->arrayNode('connection')
+        $rootNode->children() // Children
+            ->arrayNode('connection') //Connection
             ->addDefaultsIfNotSet()
-                ->children()
-                    ->scalarNode('class')
-                        ->defaultValue('Neoxygen\NeoConnect\HttpClient\HttpClient')->end()
+                ->children()  //Conenction CH
+                    ->scalarNode('class')->defaultValue('Neoxygen\NeoConnect\HttpClient\HttpClient')->end()
                     ->scalarNode('scheme')->defaultValue('http')->end()
                     ->scalarNode('host')->defaultValue('localhost')->end()
                     ->integerNode('port')->defaultValue('7474')->end()
-                ->end()
-                ->end()
-            ->arrayNode('transaction')
+                ->end() // End Connection CH
+                ->end() // End Connection
+
+            ->arrayNode('transaction') // TRANSACTION
             ->addDefaultsIfNotSet()
-                ->children()
+                ->children()  // TRANSACTION CHILDREN
+
                     ->scalarNode('mode')->defaultValue('auto')->end()
-                    ->arrayNode('commit_strategy')
-                    ->addDefaultsIfNotSet()
-                        ->children()
-                        ->scalarNode('strategy')->defaultValue('auto')
-                            ->validate()
-                            ->ifNotInArray($supportedCommitStrategies)
-                            ->thenInvalid('The commit strategy %s is not supported. Please choose one of
-                            '.json_encode($supportedCommitStrategies))
-                        ->end()
-                        ->end()
-                        ->scalarNode('class')->end()
-                        ->integerNode('stack_flush_limit')->end()
-                    ->end()
-                ->end()
+
+                    ->arrayNode('commit_strategy') // COMMIT STRAT
+                        ->addDefaultsIfNotSet()
+                            ->children() // COMMIT STRAT CH
+                                ->scalarNode('strategy')->defaultValue('auto')
+                                    ->validate()
+                                    ->ifNotInArray($supportedCommitStrategies)
+                                    ->thenInvalid('The commit strategy %s is not supported. Please choose one of
+                                    '.json_encode($supportedCommitStrategies))
+                                    ->end() // END VALIDATION STRATEGY
+                                ->end()// END STRATEGY
+
+                                ->scalarNode('class')->end()
+                                ->integerNode('stack_flush_limit')->end()
+                            ->end() // END COMMIT STRATEGy CH
+                    ->end() // END COMMIT STRATEGY
+                ->end() // END TRANSACTION CHILDREN
+            ->validate()
+            ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'custom'
+            && empty($v['commit_strategy']['class']);})
+            ->thenInvalid("You need to specify your custom commit strategy class")
             ->end()
-            ->validate()
-                ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'custom'
-                && empty($v['commit_strategy']['class']);})
-                ->thenInvalid("You need to specify your custom commit strategy class")
-            ->end();
-            /**
-             * Will be implemented further
-             *
-            ->validate()
-                ->ifTrue(function ($v) {return $v['commit_strategy']['strategy'] === 'stack'
-                && empty($v['commit_strategy']['stack_flush_limit']);})
-                ->thenInvalid('You need to specify a value for "stack_flush_limit" when using Stack Commit Strategy')
-            ->end();
-             * */
+
+            ->end() // END TRANSACTION
+
+
+
+                ->arrayNode('logger') // LOGGERS
+                    ->prototype('array')
+                    ->children()
+                        ->scalarNode('type')
+                            ->validate()
+                            ->ifNotInArray($supportedLoggerTypes)
+                            ->thenInvalid('The logging type %s is not supported. Only "stream" is currently supported')
+                            ->end() // END VALIDATION LOG TYPE
+                        ->end()
+                        ->scalarNode('path')->end()
+                        ->scalarNode('level')->isRequired()->cannotBeEmpty()->end()
+                    ->end() // END CHILDREN LOGGERS
+                    ->validate()
+                    ->ifTrue(function ($v) { return $v['type'] === 'stream' && empty($v['path']);})
+                    ->thenInvalid('You need to specify a path for your logfile when using the "stream" logging type')
+                    ->end()
+                ->end() // END LOGGER
+
+
+
+            ->end(); // END ROOT CHILDREN
 
         $this->addServiceSection($rootNode);
 

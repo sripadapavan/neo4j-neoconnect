@@ -9,11 +9,8 @@ transaction:
     strategy: auto # auto|stack
 
 # Logger Settings
-# @since v0.6
-
 #logger:
-#  handlers:
-#    debug:
-#      type: stream
-#      path: /path/to/your/log/dir
-#      level: debug #Level of logging
+#  default:
+#    type: stream
+#    path: /var/log/neoconnect.log
+#    level: debug
