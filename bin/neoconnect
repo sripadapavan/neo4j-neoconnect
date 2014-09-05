@@ -20,7 +20,7 @@ if (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
     exit(1);
 }
 
-use Neoxygen\NeoConnect\Console\ConfigurationCommand,
+use Neoxygen\NeoConnect\Console\ConfigCheckCommand,
     Neoxygen\NeoConnect\Console\ConfigurationGenerationCommand,
     Neoxygen\NeoConnect\Console\ConfigBootstrapCommand;
 use Symfony\Component\Console\Application;
@@ -29,4 +29,5 @@ $application = new Application('0.5');
 $application->setName('NeoConnect Console');
 $application->setVersion('0.5-dev');
 $application->add(new ConfigurationGenerationCommand());
+$application->add(new ConfigCheckCommand());
 $application->run();

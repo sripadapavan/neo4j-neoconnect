@@ -12,7 +12,8 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Console\ApplicationTester;
 use Symfony\Component\Console\Application;
-use Neoxygen\NeoConnect\Console\ConfigurationGenerationCommand;
+use Neoxygen\NeoConnect\Console\ConfigurationGenerationCommand,
+    Neoxygen\NeoConnect\Console\ConfigCheckCommand;
 
 /**
  * Defines application features from the specific context.
@@ -27,10 +28,12 @@ abstract class BaseContext implements Context, SnippetAcceptingContext
     {
         $application = new Application();
         $c = new ConfigurationGenerationCommand();
+        $check = new ConfigCheckCommand();
         $application->setName('NeoConnect Console');
         $application->setVersion('0.5-dev');
         $application->setAutoExit(false);
         $application->add($c);
+        $application->add($check);
 
         return new ApplicationTester($application);
     }

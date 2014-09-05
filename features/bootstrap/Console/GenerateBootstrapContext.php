@@ -4,6 +4,8 @@ namespace Console;
 
 use BaseContext;
 use Behat\Behat\Tester\Exception\PendingException;
+use Neoxygen\NeoConnect\Generator\ConfigFileGenerator;
+use Symfony\Component\Filesystem\Filesystem;
 
 class GenerateBootstrapContext extends BaseContext
 {
@@ -12,7 +14,11 @@ class GenerateBootstrapContext extends BaseContext
      */
     public function thereIsAConfigFilePresent()
     {
-        throw new PendingException();
+        $fs = new Filesystem();
+        if (!$fs->exists(getcwd().'/neoconnect.yml')) {
+            $generator = new ConfigFileGenerator($fs);
+            $generator->generate();
+        }
     }
 
     /**
@@ -20,7 +26,7 @@ class GenerateBootstrapContext extends BaseContext
      */
     public function myConfigurationIsTheDefaultConfig()
     {
-        throw new PendingException();
+
     }
 
     /**

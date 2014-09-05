@@ -13,7 +13,7 @@ class GenerateConfigContext extends BaseContext
     public function iRunTheCommand($cmd)
     {
         $this->applicationTester = $this->createApplicationTester();
-        $this->applicationTester->run('config:generate');
+        $this->applicationTester->run($cmd);
     }
 
     /**

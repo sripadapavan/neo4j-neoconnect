@@ -4,15 +4,27 @@ namespace Console;
 
 use BaseContext;
 use Behat\Behat\Tester\Exception\PendingException;
+use Symfony\Component\Yaml\Yaml;
 
 class ConfigCheckContext extends BaseContext
 {
+    /**
+     * @When I check the config with the cli
+     */
+    public function iRunTheConfigCheckCommand()
+    {
+        $this->applicationTester = $this->createApplicationTester();
+        $this->applicationTester->run('config:check');
+    }
+
     /**
      * @Then there should be no errors
      */
     public function thereShouldBeNoErrors()
     {
-        throw new PendingException();
+        $this->applicationTester = $this->createApplicationTester();
+        $this->applicationTester->run('config:check');
+        $this->iShouldSee('The configuration is valid');
     }
 
     /**
@@ -20,7 +32,11 @@ class ConfigCheckContext extends BaseContext
      */
     public function myConfigurationIsInvalid()
     {
-        throw new PendingException();
+        $config = Yaml::parse(getcwd().'/neoconnect.yml');
+        $con = $config['neoconnect']['connection'];
+        unset($config['neoconnect']['connection']);
+        $config['connectionssss'] = $con;
+        Yaml::dump(getcwd().'/neoconnect.yml', $config);
     }
 
     /**
@@ -28,7 +44,9 @@ class ConfigCheckContext extends BaseContext
      */
     public function iShouldSeeAnErrorMessage()
     {
-        throw new PendingException();
+        $this->applicationTester = $this->createApplicationTester();
+        $this->applicationTester->run('config:check');
+        $this->iShouldSee('is invalid');
     }
 
 }
