@@ -1,5 +1,5 @@
 neoconnect:
-  connection:
+  connections:
     scheme: http # http|https
     host: localhost # The host where your database lives
     port: 7474 # The port to connect to your database

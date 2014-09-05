@@ -5,6 +5,8 @@ default:
       contexts:
         - Console\DiscoveryContext
         - Console\GenerateConfigContext
+        - Console\GenerateBootstrapContext
+        - Console\ConfigCheckContext
 
       filters:
         tags: "@config"

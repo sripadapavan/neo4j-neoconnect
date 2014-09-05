@@ -8,13 +8,13 @@
  * @license MIT License
  */
 
-namespace Neoxygen\NeoConnect\DependencyInjection;
+namespace Neoxygen\NeoConnect\Configuration;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class Configuration implements ConfigurationInterface
+class Definition implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
