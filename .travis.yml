@@ -23,7 +23,8 @@ before_script:
 
 script:
     - mkdir -p build/logs
-    - bin/phpspec run -f dot
+    - bin/phpspec run -fpretty dot
+    - bin/behat
     - phpunit
 
 after_script:
