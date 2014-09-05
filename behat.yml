@@ -7,6 +7,11 @@ default:
         - Console\GenerateConfigContext
         - Console\GenerateBootstrapContext
         - Console\ConfigCheckContext
-
       filters:
         tags: "@config"
+
+    connection:
+      contexts:
+        - Connection\ConnectionManagementContext
+      filters:
+        tags: "@connection"
