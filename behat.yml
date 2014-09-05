@@ -1,0 +1,10 @@
+# Behat Configuration
+default:
+  suites:
+    config:
+      contexts:
+        - Console\DiscoveryContext
+        - Console\GenerateConfigContext
+
+      filters:
+        tags: "@config"
