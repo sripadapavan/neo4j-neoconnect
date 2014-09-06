@@ -92,12 +92,12 @@ class ConnectionSpec extends ObjectBehavior
         $this->getPassword()->shouldReturn('mySecret');
     }
 
-    function it_should_not_have_a_commit_strategy_by_default()
+    public function it_should_not_have_a_commit_strategy_by_default()
     {
         $this->getCommitStrategy()->shouldReturn(null);
     }
 
-    function its_commit_strategy_should_be_mutable()
+    public function its_commit_strategy_should_be_mutable()
     {
         $this->setCommitStrategy('auto');
         $this->getCommitStrategy()->shouldReturn('auto');

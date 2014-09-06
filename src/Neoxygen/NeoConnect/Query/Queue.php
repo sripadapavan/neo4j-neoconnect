@@ -2,8 +2,6 @@
 
 namespace Neoxygen\NeoConnect\Query;
 
-use Neoxygen\NeoConnect\Query\Statement;
-
 class Queue
 {
     const EMPTY_STATE_CODE = 0;

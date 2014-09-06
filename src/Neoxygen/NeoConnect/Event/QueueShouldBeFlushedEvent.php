@@ -11,19 +11,19 @@
 namespace Neoxygen\NeoConnect\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Neoxygen\NeoConnect\Statement\Statement;
+use Neoxygen\NeoConnect\Query\Queue;
 
-class PreQueryAddedToStackEvent extends Event
+class QueueShouldBeFlushedEvent extends Event
 {
-    protected $statement;
+    protected $queue;
 
-    public function __construct(Statement $statement)
+    public function __construct(Queue $queue)
     {
-        $this->statement = $statement;
+        $this->queue = $queue;
     }
 
-    public function getStatement()
+    public function getQueue()
     {
-        return $this->statement;
+        return $this->queue;
     }
 }

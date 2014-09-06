@@ -49,7 +49,7 @@ class ServiceContainerSpec extends ObjectBehavior
         $this->setConnections()->shouldReturn(true);
     }
 
-    function it_should_add_the_commit_strategy_to_the_connection()
+    public function it_should_add_the_commit_strategy_to_the_connection()
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
@@ -74,7 +74,7 @@ class ServiceContainerSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('getConnectionManager');
     }
 
-    function it_should_register_the_commit_strategies_classes()
+    public function it_should_register_the_commit_strategies_classes()
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
@@ -83,7 +83,7 @@ class ServiceContainerSpec extends ObjectBehavior
         );
     }
 
-    function it_do_all_in_one()
+    public function it_do_all_in_one()
     {
         $this->loadConfiguration($this->getConfig());
         $this->build();

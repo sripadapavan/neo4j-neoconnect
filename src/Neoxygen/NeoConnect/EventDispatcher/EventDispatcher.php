@@ -14,5 +14,4 @@ use Symfony\Component\EventDispatcher\EventDispatcher as BaseDispatcher;
 
 class EventDispatcher extends BaseDispatcher
 {
-
 }

@@ -56,4 +56,16 @@ final class NeoConnectEvents
      * This Event consists of a level, a message and an context array
      */
     const GENERIC_LOGGING = 'generic.logging';
+
+    /**
+     * This Event is dispatched when the commit strategy has determined that the queue should not be flushed
+     * This Event return the Query Queue of the last sendQuery action
+     */
+    const QUEUE_SHOULD_NOT_BE_FLUSHED_EVENT = 'queue.should_not_be_flushed';
+
+    /**
+     * This Event is dispatched when the commit strategy has determined that the queue should be flushed
+     * This Event return the Query Queue of the last sendQuery action
+     */
+    const QUEUE_SHOULD_BE_FLUSHED_EVENT = 'queue.should_be_flushed';
 }

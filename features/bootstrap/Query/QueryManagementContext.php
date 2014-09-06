@@ -12,7 +12,6 @@ namespace Query;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext,
     Behat\Behat\Tester\Exception\PendingException;
-use Symfony\Component\Filesystem\Filesystem;
 use Neoxygen\NeoConnect\Generator\ConfigFileGenerator,
     Neoxygen\NeoConnect\ServiceContainer\ServiceContainer,
     Neoxygen\NeoConnect\Connection\ConnectionManager;
@@ -22,7 +21,6 @@ use Neoxygen\NeoConnect\Generator\ConfigFileGenerator,
  */
 class QueryManagementContext implements Context, SnippetAcceptingContext
 {
-
 
     /**
      * @Given The application is bootstrapped with default config

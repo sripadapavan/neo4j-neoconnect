@@ -92,7 +92,7 @@ class ConnectionManagerSpec extends ObjectBehavior
         $this->getConnection()->getAlias()->shouldReturn('default');
     }
 
-    function it_should_return_bool_when_asking_if_a_connection_exist()
+    public function it_should_return_bool_when_asking_if_a_connection_exist()
     {
         $this->createConnection('default');
         $this->hasConnection('default')->shouldReturn(true);

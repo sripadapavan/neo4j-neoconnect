@@ -3,6 +3,7 @@ parameters:
   neoconnect.connection.class: "Neoxygen\\NeoConnect\\Connection\\Connection"
   neoconnect.commit_manager.class: "Neoxygen\\NeoConnect\\Commit\\CommitManager"
   neoconnect.query_manager.class: "Neoxygen\\NeoConnect\\Query\\QueryManager"
+  neoconnect.event_dispatcher.class: "Neoxygen\\NeoConnect\\EventDispatcher\\EventDispatcher"
 
 services:
 
@@ -12,7 +13,11 @@ services:
 
   neoconnect.commit_manager:
     class: "%neoconnect.commit_manager.class%"
+    arguments: ["@neoconnect.connection_manager", "@neoconnect.event_dispatcher"]
 
   neoconnect.query_manager:
     class: "%neoconnect.query_manager.class%"
     arguments: ["@neoconnect.connection_manager", "@neoconnect.commit_manager"]
+
+  neoconnect.event_dispatcher:
+    class: "%neoconnect.event_dispatcher.class%"
