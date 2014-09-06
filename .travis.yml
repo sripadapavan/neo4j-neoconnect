@@ -23,9 +23,8 @@ before_script:
 
 script:
     - mkdir -p build/logs
-    - bin/phpspec run -fpretty dot
+    - bin/phpspec run -f dot
     - bin/behat
-    #- phpunit
 
 after_script:
     - php vendor/bin/coveralls
