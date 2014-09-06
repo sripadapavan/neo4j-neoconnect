@@ -33,8 +33,8 @@ class ConfigCheckContext extends BaseContext
     public function myConfigurationIsInvalid()
     {
         $config = Yaml::parse(getcwd().'/neoconnect.yml');
-        $con = $config['neoconnect']['connection'];
-        unset($config['neoconnect']['connection']);
+        $con = $config['neoconnect']['connections'];
+        unset($config['neoconnect']['connections']);
         $config['connectionssss'] = $con;
         Yaml::dump(getcwd().'/neoconnect.yml', $config);
     }
