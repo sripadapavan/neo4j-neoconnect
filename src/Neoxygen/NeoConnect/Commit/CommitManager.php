@@ -9,7 +9,7 @@ use Neoxygen\NeoConnect\Commit\CommitStrategyInterface,
     Neoxygen\NeoConnect\NeoConnectEvents,
     Neoxygen\NeoConnect\Event\QueueShouldNotBeFlushedEvent,
     Neoxygen\NeoConnect\Event\QueueShouldBeFlushedEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Neoxygen\NeoConnect\EventDispatcher\CAEventDispatcher;
 
 class CommitManager
 {
@@ -18,7 +18,7 @@ class CommitManager
     protected $connectionManager;
     protected $eventDispatcher;
 
-    public function __construct(ConnectionManager $connectionManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectionManager $connectionManager, CAEventDispatcher $eventDispatcher)
     {
         $this->connectionManager = $connectionManager;
         $this->eventDispatcher = $eventDispatcher;
@@ -61,7 +61,7 @@ class CommitManager
         }
 
         if (!array_key_exists($strategyAlias, $this->loadedStrategies)) {
-            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias()];
+            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias];
 
             return $this->loadedStrategies[$strategyAlias];
         } else {

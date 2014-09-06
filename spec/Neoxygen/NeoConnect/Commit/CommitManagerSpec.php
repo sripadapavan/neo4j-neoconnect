@@ -9,13 +9,13 @@ use Prophecy\Argument;
 use Neoxygen\NeoConnect\Query\Queue,
     Neoxygen\NeoConnect\Connection\ConnectionManager,
     Neoxygen\NeoConnect\Connection\Connection,
-    Neoxygen\NeoConnect\EventDispatcher\EventDispatcher,
+    Neoxygen\NeoConnect\EventDispatcher\CAEventDispatcher,
     Neoxygen\NeoConnect\Event\QueueShouldNotBeFlushedEvent,
     Neoxygen\NeoConnect\NeoConnectEvents;
 
 class CommitManagerSpec extends ObjectBehavior
 {
-    public function let(ConnectionManager $connectionManager, EventDispatcher $eventDispatcher)
+    public function let(ConnectionManager $connectionManager, CAEventDispatcher $eventDispatcher)
     {
         $this->beConstructedWith($connectionManager, $eventDispatcher);
     }
@@ -65,7 +65,7 @@ class CommitManagerSpec extends ObjectBehavior
         ConnectionManager $connectionManager,
         ManualCommitStrategy $strategy,
         Queue $queue,
-        EventDispatcher $eventDispatcher)
+        CAEventDispatcher $eventDispatcher)
     {
         $this->registerCommitStrategy('manual', 'Neoxygen\NeoConnect\Commit\ManualCommitStrategy');
         $con = new Connection('default');
@@ -77,14 +77,14 @@ class CommitManagerSpec extends ObjectBehavior
         $this->handleQueue($queue)->shouldReturn(true);
     }
 
-    public function it_should_dispatch_a_no_flush_report_event(EventDispatcher $eventDispatcher)
+    public function it_should_dispatch_a_no_flush_report_event(CAEventDispatcher $eventDispatcher)
     {
         $queue = new Queue('default');
         $eventDispatcher->dispatch(Argument::any(), Argument::any())->shouldBeCalled();
         $this->dispatchNoFlush($queue);
     }
 
-    public function it_should_dispatch_a_flush_report_event(EventDispatcher $eventDispatcher)
+    public function it_should_dispatch_a_flush_report_event(CAEventDispatcher $eventDispatcher)
     {
         $queue = new Queue('default');
         $eventDispatcher->dispatch(Argument::any(), Argument::any())->shouldBeCalled();

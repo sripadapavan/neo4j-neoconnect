@@ -4,19 +4,25 @@ namespace Neoxygen\NeoConnect\ServiceContainer;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\Config\FileLocator;
+    Symfony\Component\Config\FileLocator,
+    Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Neoxygen\NeoConnect\Configuration\ConfigValidator,
-    Neoxygen\NeoConnect\Connection\ConnectionManager;
+    Neoxygen\NeoConnect\Connection\ConnectionManager,
+    Neoxygen\NeoConnect\ServiceContainer\Compiler\FlushSubscribersCompilerPass;
 
 class ServiceContainer
 {
     protected $builder;
     protected $configuration;
     protected $connectionManager;
+    protected $cdispatcher;
 
     public function __construct()
     {
         $this->builder = new ContainerBuilder();
+        $this->builder->addCompilerPass(new FlushSubscribersCompilerPass());
+
+        //$this->cdispatcher = new ContainerAwareEventDispatcher($this->builder);
     }
 
     public function getContainerBuilder()
@@ -41,6 +47,8 @@ class ServiceContainer
         $this->loadServiceDefinitions();
         $this->registerCommitStrategiesClasses();
         $this->compile();
+
+        $this->registerStrategies();
         $this->setConnections();
     }
 
@@ -110,5 +118,19 @@ class ServiceContainer
         }
 
         return true;
+    }
+
+    public function registerStrategies()
+    {
+        foreach($this->configuration['connections'] as $connection => $params) {
+            $strategy = $params['commit_strategy']['strategy'];
+            $cm = $this->builder->get('neoconnect.commit_manager');
+            $cm->registerCommitStrategy($strategy, $this->builder->getParameter('neoconnect.commit_strategy.'.$strategy.'.class'));
+        }
+    }
+
+    public function query($q)
+    {
+        return $this->builder->get('neoconnect.query_manager')->createQuery($q);
     }
 }
