@@ -1,8 +1,9 @@
 neoconnect:
-  connection:
-    scheme: http # http|https
-    host: localhost # The host where your database lives
-    port: 7474 # The port to connect to your database
+  connections:
+    default:
+      scheme: http # http|https
+      host: localhost # The host where your database lives
+      port: 7474 # The port to connect to your database
 
 # Transaction Settings
   transaction:

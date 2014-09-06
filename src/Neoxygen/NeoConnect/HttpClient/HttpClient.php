@@ -24,13 +24,6 @@ class HttpClient implements HttpClientInterface
     protected $client;
     protected $eventDispatcher;
 
-    public function __construct($scheme, $host, $port, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseUrl = $scheme . '://' . $host . ':' . $port;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->client = new Client();
-    }
-
     public function send($method, $url = null, $body = null, array $defaults = array())
     {
         $uri = null !== $url ? (string) $url : $this->baseUrl;

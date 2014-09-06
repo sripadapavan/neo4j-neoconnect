@@ -1,34 +1,9 @@
+parameters:
+  neoconnect.connection_manager.class: "Neoxygen\\NeoConnect\\Connection\\ConnectionManager"
+  neoconnect.connection.class: "Neoxygen\NeoConnect\Connection\Connection"
+
 services:
-  neoconnect.http_client:
-    class: "%neoconnect.connection.class%"
-    arguments: ["%neoconnect.connection.scheme%","%neoconnect.connection.host%","%neoconnect.connection.port%","@neoconnect.event_dispatcher"]
 
-  neoconnect.event_dispatcher:
-    class: "Neoxygen\\NeoConnect\\EventDispatcher\\EventDispatcher"
-
-  neoconnect.deserializer:
-    class: "Neoxygen\\NeoConnect\\Deserializer\\Deserializer"
-
-  neoconnect.api_discovery:
-    class: "Neoxygen\\NeoConnect\\Api\\Discovery"
-    arguments: ["@neoconnect.http_client", "@neoconnect.deserializer", "@neoconnect.event_dispatcher"]
-
-  neoconnect.transaction_manager:
-    class: "Neoxygen\\NeoConnect\\Transaction\\TransactionManager"
-    arguments:
-      - "@neoconnect.stack_manager"
-      - "@neoconnect.commit_strategy"
-      - "@neoconnect.http_client"
-      - "@neoconnect.api_discovery"
-      - "@neoconnect.event_dispatcher"
-
-  neoconnect.stack_manager:
-    class: "Neoxygen\\NeoConnect\\Statement\\StackManager"
-    arguments: ["@neoconnect.event_dispatcher"]
-
-  neoconnect.logger:
-    class: "Neoxygen\\NeoConnect\\Logger\\Logger"
-
-  neoconnect.logging_event_subscriber:
-    class: "Neoxygen\\NeoConnect\\EventSubscriber\\LoggingEventSubscriber"
-    arguments: ["@neoconnect.logger"]
+  neoconnect.connection_manager:
+    class: "%neoconnect.connection_manager.class%"
+    arguments: ["%neoconnect.connection.class%"]

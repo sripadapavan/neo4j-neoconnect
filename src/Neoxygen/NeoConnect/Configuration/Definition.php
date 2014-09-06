@@ -23,17 +23,24 @@ class Definition implements ConfigurationInterface
 
         $supportedCommitStrategies = array('auto', 'stack', 'custom');
         $supportedLoggerTypes = array('stream'); // other supports in the roadmap
+        $supportedSchemes = array('http', 'https');
 
         $rootNode->children() // Children
-            ->arrayNode('connection') //Connection
-            ->addDefaultsIfNotSet()
-                ->children()  //Conenction CH
-                    ->scalarNode('class')->defaultValue('Neoxygen\NeoConnect\HttpClient\HttpClient')->end()
-                    ->scalarNode('scheme')->defaultValue('http')->end()
+            ->arrayNode('connections') //Connections
+            ->requiresAtLeastOneElement()
+            ->prototype('array')
+                ->children()  //Conenctions CH
+                    ->scalarNode('scheme')->defaultValue('http')
+                        ->validate()
+                        ->ifNotInArray($supportedSchemes)
+                        ->thenInvalid('The scheme %s is not valid, please choose one of '.json_encode($supportedSchemes))
+                        ->end() // End validation scheme
+                    ->end() // END Scheme
                     ->scalarNode('host')->defaultValue('localhost')->end()
                     ->integerNode('port')->defaultValue('7474')->end()
-                ->end() // End Connection CH
-                ->end() // End Connection
+                ->end() // End Prototype CH
+                ->end() // End Prototype
+                ->end() // End Connections
 
             ->arrayNode('transaction') // TRANSACTION
             ->addDefaultsIfNotSet()
