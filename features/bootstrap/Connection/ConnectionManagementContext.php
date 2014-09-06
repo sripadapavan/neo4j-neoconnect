@@ -10,7 +10,8 @@
 namespace Connection;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Context\SnippetAcceptingContext,
+    Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\Filesystem\Filesystem;
 use Neoxygen\NeoConnect\Generator\ConfigFileGenerator,
     Neoxygen\NeoConnect\ServiceContainer\ServiceContainer,
@@ -21,6 +22,7 @@ use Neoxygen\NeoConnect\Generator\ConfigFileGenerator,
  */
 class ConnectionManagementContext implements Context, SnippetAcceptingContext
 {
+    protected $alias;
     /**
      * @Given There is a default config file present
      */
@@ -113,6 +115,29 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $conn = $manager->getConnection();
         expect($conn->getAlias())->toBe('default');
     }
+
+    /**
+     * @When I ask the :arg1 connection
+     */
+    public function iAskTheConnection($alias)
+    {
+        $this->alias = $alias;
+
+    }
+
+    /**
+     * @Then I should have an invalid connection error
+     */
+    public function iShouldHaveAnInvalidConnectionError()
+    {
+        $container = new ServiceContainer();
+        $container->loadConfiguration(getcwd().'/neoconnect.yml');
+        $container->loadServiceDefinitions();
+        $container->setConnections();
+        $manager = $container->getConnectionManager();
+        expect($manager)->toThrow('\InvalidArgumentException')->during('getConnection', array($this->alias));
+    }
+
 
     private function generateConfig()
     {

@@ -19,3 +19,8 @@ Feature: Manage multiple DB Connections
     Given There is a multiple connections configuration
     When I ask a connection without specifying the alias
     Then I should get the default connection
+
+  Scenario: Asking a non existent connection
+    Given There is a multiple connections configuration
+    When I ask the "rumblebee" connection
+    Then I should have an invalid connection error
