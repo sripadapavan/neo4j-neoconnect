@@ -79,4 +79,14 @@ class ConnectionManager
 
         return $this->connections[$alias];
     }
+
+    public function hasConnection($alias)
+    {
+        return array_key_exists($alias, $this->connections);
+    }
+
+    public function getDefaultConnectionAlias()
+    {
+        return $this->getDefaultConnection()->getAlias();
+    }
 }

@@ -1,9 +1,18 @@
 parameters:
   neoconnect.connection_manager.class: "Neoxygen\\NeoConnect\\Connection\\ConnectionManager"
-  neoconnect.connection.class: "Neoxygen\NeoConnect\Connection\Connection"
+  neoconnect.connection.class: "Neoxygen\\NeoConnect\\Connection\\Connection"
+  neoconnect.commit_manager.class: "Neoxygen\\NeoConnect\\Commit\\CommitManager"
+  neoconnect.query_manager.class: "Neoxygen\\NeoConnect\\Query\\QueryManager"
 
 services:
 
   neoconnect.connection_manager:
     class: "%neoconnect.connection_manager.class%"
     arguments: ["%neoconnect.connection.class%"]
+
+  neoconnect.commit_manager:
+    class: "%neoconnect.commit_manager.class%"
+
+  neoconnect.query_manager:
+    class: "%neoconnect.query_manager.class%"
+    arguments: ["@neoconnect.connection_manager", "@neoconnect.commit_manager"]

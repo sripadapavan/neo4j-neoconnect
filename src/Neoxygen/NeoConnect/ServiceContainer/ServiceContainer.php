@@ -32,6 +32,18 @@ class ServiceContainer
         return true;
     }
 
+    public function build()
+    {
+        if (!$this->configuration) {
+            throw new \RuntimeException('The container can not be built until the configuration is loaded and validated');
+        }
+
+        $this->loadServiceDefinitions();
+        $this->registerCommitStrategiesClasses();
+        $this->compile();
+        $this->setConnections();
+    }
+
     public function getConfiguration()
     {
         return $this->configuration;
@@ -47,9 +59,19 @@ class ServiceContainer
         if (count($this->builder->getDefinitions()) === 0) {
             throw new \RuntimeException('Service definitions are not set');
         }
-        $this->builder->compile();
+
+        $this->registerCommitStrategiesClasses();
 
         return true;
+    }
+
+    public function compile()
+    {
+        if (!$this->configuration || $this->builder->isFrozen()) {
+            throw new \RuntimeException('The container is frozen or config is not loaded');
+        }
+
+        return $this->builder->compile();
     }
 
     public function setConnections()
@@ -62,6 +84,7 @@ class ServiceContainer
                 $connection['host'],
                 $connection['port']
             );
+            $manager->getConnection($alias)->setCommitStrategy($connection['commit_strategy']['strategy']);
         }
 
         return true;
@@ -78,5 +101,14 @@ class ServiceContainer
         }
 
         return $this->connectionManager;
+    }
+
+    public function registerCommitStrategiesClasses()
+    {
+        foreach ($this->configuration['class']['commit_strategy'] as $name => $class) {
+            $this->builder->setParameter('neoconnect.commit_strategy.'.$name.'.class', $class);
+        }
+
+        return true;
     }
 }

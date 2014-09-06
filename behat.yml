@@ -15,3 +15,9 @@ default:
         - Connection\ConnectionManagementContext
       filters:
         tags: "@connection"
+
+    query:
+      contexts:
+        - Query\QueryManagementContext
+      filters:
+        tags: "@query_management"

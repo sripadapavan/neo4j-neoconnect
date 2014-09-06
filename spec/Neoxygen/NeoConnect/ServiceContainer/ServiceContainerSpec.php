@@ -37,6 +37,7 @@ class ServiceContainerSpec extends ObjectBehavior
 
     public function it_should_load_the_services_definitions()
     {
+        $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions()->shouldReturn(true);
     }
 
@@ -44,13 +45,25 @@ class ServiceContainerSpec extends ObjectBehavior
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
+        $this->compile();
         $this->setConnections()->shouldReturn(true);
+    }
+
+    function it_should_add_the_commit_strategy_to_the_connection()
+    {
+        $this->loadConfiguration($this->getConfig());
+        $this->loadServiceDefinitions();
+        $this->compile();
+        $this->setConnections();
+
+        $this->getConnectionManager()->getConnection()->getCommitStrategy()->shouldReturn('manual');
     }
 
     public function it_should_return_me_the_connection_manager()
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
+        $this->compile();
         $this->setConnections();
         $this->getConnectionManager()->shouldHaveType('Neoxygen\NeoConnect\Connection\ConnectionManager');
         $this->getConnectionManager()->getConnections()->shouldHaveCount(1);
@@ -59,6 +72,24 @@ class ServiceContainerSpec extends ObjectBehavior
     public function it_should_throw_exception_when_try_access_to_connection_manager_before_container_frozing()
     {
         $this->shouldThrow('\InvalidArgumentException')->during('getConnectionManager');
+    }
+
+    function it_should_register_the_commit_strategies_classes()
+    {
+        $this->loadConfiguration($this->getConfig());
+        $this->loadServiceDefinitions();
+        $this->getContainerBuilder()->getParameter('neoconnect.commit_strategy.manual.class')->shouldReturn(
+            'Neoxygen\NeoConnect\Commit\ManualCommitStrategy'
+        );
+    }
+
+    function it_do_all_in_one()
+    {
+        $this->loadConfiguration($this->getConfig());
+        $this->build();
+        $this->getContainerBuilder()->getParameter('neoconnect.commit_strategy.manual.class')->shouldReturn(
+            'Neoxygen\NeoConnect\Commit\ManualCommitStrategy'
+        );
     }
 
     private function getConfig()

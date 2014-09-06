@@ -1,8 +1,8 @@
 @connection
 Feature: Manage multiple DB Connections
   As a developer
-  When working with multiple databases
-  I want a Connection Management to switch between them
+  I need to work with multiple graph databases
+  So I want a Connection Management to switch between them
 
   Scenario: Accessing the connection manager
     Given There is a default config file present

@@ -24,6 +24,7 @@ class Definition implements ConfigurationInterface
         $supportedCommitStrategies = array('auto', 'stack', 'custom');
         $supportedLoggerTypes = array('stream'); // other supports in the roadmap
         $supportedSchemes = array('http', 'https');
+        $supportStrategies = array('manual', 'auto');
 
         $rootNode->children() // Children
             ->arrayNode('connections') //Connections
@@ -38,6 +39,18 @@ class Definition implements ConfigurationInterface
                     ->end() // END Scheme
                     ->scalarNode('host')->defaultValue('localhost')->end()
                     ->integerNode('port')->defaultValue('7474')->end()
+                    ->arrayNode('commit_strategy') // COMMIT STRATEGY
+                    ->addDefaultsIfNotSet()
+                        ->children() // COMMIT STRATEGY CHILDREN
+                        ->scalarNode('strategy')->isRequired()->canNotBeEmpty()->defaultValue('manual') //STRATEGY
+                            ->validate() // STRATEGY VALIDATION
+                            ->ifNotInArray($supportStrategies)
+                            ->thenInvalid('The commit strategy %s is not supported, please choose one of'.
+                            json_encode($supportStrategies))
+                            ->end() // END VALIDATION
+                        ->end() // END STRATEGY
+                    ->end() // END COMMIT STRATEGY CHILDREN
+                    ->end() // END COMMIT STRATEGY
                 ->end() // End Prototype CH
                 ->end() // End Prototype
                 ->end() // End Connections
@@ -95,6 +108,7 @@ class Definition implements ConfigurationInterface
             ->end(); // END ROOT CHILDREN
 
         $this->addServiceSection($rootNode);
+        $this->addClassSection($rootNode);
 
         return $treeBuilder;
     }
@@ -113,5 +127,23 @@ class Definition implements ConfigurationInterface
                 ->end()
                 ->end()
             ->end();
+    }
+    private function addClassSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->addDefaultsIfNotSet()
+                ->children()
+                    ->arrayNode('class')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->arrayNode('commit_strategy')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('manual')->defaultValue('Neoxygen\NeoConnect\Commit\ManualCommitStrategy')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
 }

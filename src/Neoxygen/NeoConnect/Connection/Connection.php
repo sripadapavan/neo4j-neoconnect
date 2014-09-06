@@ -11,6 +11,7 @@ class Connection
     protected $authMode = false;
     protected $user;
     protected $password;
+    protected $commitStrategy;
 
     public function __construct($alias, $scheme = 'http', $host = 'localhost', $port = 7474)
     {
@@ -86,5 +87,15 @@ class Connection
     public function setPassword($password)
     {
         $this->password = (string) $password;
+    }
+
+    public function getCommitStrategy()
+    {
+        return $this->commitStrategy;
+    }
+
+    public function setCommitStrategy($strategy)
+    {
+        $this->commitStrategy = $strategy;
     }
 }

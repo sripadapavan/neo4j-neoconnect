@@ -138,7 +138,6 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         expect($manager)->toThrow('\InvalidArgumentException')->during('getConnection', array($this->alias));
     }
 
-
     private function generateConfig()
     {
         $fs = new Filesystem();
