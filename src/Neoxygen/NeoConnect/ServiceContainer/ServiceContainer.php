@@ -44,7 +44,7 @@ class ServiceContainer
 
         $loader->load('services.yml');
 
-        if (count($this->builder->getDefinitions()) === 0){
+        if (count($this->builder->getDefinitions()) === 0) {
             throw new \RuntimeException('Service definitions are not set');
         }
         $this->builder->compile();

@@ -3,7 +3,6 @@
 namespace Console;
 
 use BaseContext;
-use Behat\Behat\Tester\Exception\PendingException;
 
 class GenerateConfigContext extends BaseContext
 {

@@ -22,6 +22,7 @@ class IO
             if (is_writable($directory)) {
                 return true;
             }
+
             return false;
 
         }
@@ -43,6 +44,7 @@ class IO
                 throw new \RuntimeException(sprintf('Unable to create the file "%s" '));
             }
             chmod($filePath, 0777);
+
             return true;
         }
 

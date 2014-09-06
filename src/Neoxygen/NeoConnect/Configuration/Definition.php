@@ -73,7 +73,6 @@ class Definition implements ConfigurationInterface
             ->end() // END TRANSACTION
 
 
-
                 ->arrayNode('logger') // LOGGERS
                     ->prototype('array')
                     ->children()
@@ -91,7 +90,6 @@ class Definition implements ConfigurationInterface
                     ->thenInvalid('You need to specify a path for your logfile when using the "stream" logging type')
                     ->end()
                 ->end() // END LOGGER
-
 
 
             ->end(); // END ROOT CHILDREN

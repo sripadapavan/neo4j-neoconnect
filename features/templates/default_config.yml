@@ -1,0 +1,18 @@
+neoconnect:
+  connections:
+    default:
+      scheme: http # http|https
+      host: localhost # The host where your database lives
+      port: 7474 # The port to connect to your database
+
+# Transaction Settings
+  transaction:
+    commit_strategy:
+      strategy: auto # auto|stack
+
+# Logger Settings
+# logger:
+#   default:
+#     type: stream
+#     path: /var/log/neoconnect.log
+#     level: debug

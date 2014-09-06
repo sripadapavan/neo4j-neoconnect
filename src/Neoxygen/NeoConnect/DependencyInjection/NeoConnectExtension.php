@@ -59,8 +59,6 @@ class NeoConnectExtension implements ExtensionInterface
         // Registering Loggers
 
 
-
-
     }
 
     public function getAlias()

@@ -3,50 +3,51 @@
 namespace spec\Neoxygen\NeoConnect\ServiceContainer;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Neoxygen\NeoConnect\Configuration\ConfigValidator;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Filesystem\Filesystem;
 
 class ServiceContainerSpec extends ObjectBehavior
 {
+    protected $configGenerated = false;
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('Neoxygen\NeoConnect\ServiceContainer\ServiceContainer');
     }
 
-    function it_should_initialize_a_container_builder()
+    public function it_should_initialize_a_container_builder()
     {
         $this->getContainerBuilder()->shouldHaveType('Symfony\Component\DependencyInjection\ContainerBuilder');
     }
 
-    function it_should_take_a_config_file_to_load_and_validate(ConfigValidator $validator)
+    public function it_should_take_a_config_file_to_load_and_validate(ConfigValidator $validator)
     {
         $config = $this->getConfig();
         $validator->validateConfiguration($config)->willReturn(true);
         $this->loadConfiguration($config)->shouldReturn(true);
     }
 
-    function it_should_return_the_validated_configuration()
+    public function it_should_return_the_validated_configuration()
     {
         $config = $this->getConfig();
         $this->loadConfiguration($config);
         $this->getConfiguration()->shouldBeArray();
     }
 
-    function it_should_load_the_services_definitions()
+    public function it_should_load_the_services_definitions()
     {
         $this->loadServiceDefinitions()->shouldReturn(true);
     }
 
-    function it_should_add_the_connections_to_the_manager()
+    public function it_should_add_the_connections_to_the_manager()
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
         $this->setConnections()->shouldReturn(true);
     }
 
-    function it_should_return_me_the_connection_manager()
+    public function it_should_return_me_the_connection_manager()
     {
         $this->loadConfiguration($this->getConfig());
         $this->loadServiceDefinitions();
@@ -55,13 +56,24 @@ class ServiceContainerSpec extends ObjectBehavior
         $this->getConnectionManager()->getConnections()->shouldHaveCount(1);
     }
 
-    function it_should_throw_exception_when_try_access_to_connection_manager_before_container_frozing()
+    public function it_should_throw_exception_when_try_access_to_connection_manager_before_container_frozing()
     {
         $this->shouldThrow('\InvalidArgumentException')->during('getConnectionManager');
     }
 
     private function getConfig()
     {
+        if (true === $this->configGenerated) {
+            return getcwd().'/neoconnect.yml';
+        }
+
+        $fs = new Filesystem();
+        if ($fs->exists(getcwd().'/neoconnect.yml')) {
+            $fs->remove(getcwd().'/neoconnect.yml');
+        }
+        $fs->copy(getcwd().'/features/templates/default_config.yml', getcwd().'/neoconnect.yml');
+        $this->configGenerated = true;
+
         return getcwd().'/neoconnect.yml';
     }
 }

@@ -6,7 +6,6 @@ use Symfony\Component\Yaml\Yaml,
     Symfony\Component\Yaml\Exception\ParseException,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Neoxygen\NeoConnect\Configuration\Definition;
 
 class ConfigValidator
 {

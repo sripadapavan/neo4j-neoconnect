@@ -11,7 +11,6 @@ namespace Connection;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\Filesystem\Filesystem;
 use Neoxygen\NeoConnect\Generator\ConfigFileGenerator,
     Neoxygen\NeoConnect\ServiceContainer\ServiceContainer,
@@ -88,6 +87,32 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $conn = $manager->getConnection($alias);
     }
 
+    /**
+     * @When I ask a connection without specifying the alias
+     */
+    public function iAskAConnectionWithoutSpecifyingTheAlias()
+    {
+        $container = new ServiceContainer();
+        $container->loadConfiguration(getcwd().'/neoconnect.yml');
+        $container->loadServiceDefinitions();
+        $container->setConnections();
+        $manager = $container->getConnectionManager();
+        $conn = $manager->getConnection();
+    }
+
+    /**
+     * @Then I should get the default connection
+     */
+    public function iShouldGetTheDefaultConnection()
+    {
+        $container = new ServiceContainer();
+        $container->loadConfiguration(getcwd().'/neoconnect.yml');
+        $container->loadServiceDefinitions();
+        $container->setConnections();
+        $manager = $container->getConnectionManager();
+        $conn = $manager->getConnection();
+        expect($conn->getAlias())->toBe('default');
+    }
 
     private function generateConfig()
     {

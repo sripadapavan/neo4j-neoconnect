@@ -63,7 +63,6 @@ class ConfigFileGenerator
             throw new \RuntimeException(sprintf('Unable to create config file "%s"', $e->getPath()));
         }
 
-
         return true;
     }
 

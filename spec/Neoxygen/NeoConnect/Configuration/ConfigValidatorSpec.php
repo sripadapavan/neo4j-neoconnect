@@ -10,35 +10,35 @@ use Symfony\Component\Filesystem\Filesystem,
 
 class ConfigValidatorSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('Neoxygen\NeoConnect\Configuration\ConfigValidator');
     }
 
-    function it_should_load_a_configuration_file()
+    public function it_should_load_a_configuration_file()
     {
         $this->loadConfiguration($this->getConfigurationFilePath())->shouldReturn(true);
     }
 
-    function it_should_throw_error_when_the_config_file_can_not_be_parsed(Yaml $yaml)
+    public function it_should_throw_error_when_the_config_file_can_not_be_parsed(Yaml $yaml)
     {
         $yaml->parse($this->getNonYamlFile())->willReturn(false);
         $this->shouldThrow('\InvalidArgumentException')->during('loadConfiguration', array($this->getNonYamlFile()));
     }
 
-    function it_should_process_the_configuration()
+    public function it_should_process_the_configuration()
     {
         $this->loadConfiguration($this->getConfigurationFilePath());
         $this->processConfig(Argument::any())->shouldReturn(true);
     }
 
-    function it_should_throw_error_if_configuration_is_invalid()
+    public function it_should_throw_error_if_configuration_is_invalid()
     {
         $this->loadConfiguration($this->getInvalidFile());
         $this->shouldThrow('\InvalidArgumentException')->during('processConfig', array(Argument::any(), Argument::any()));
     }
 
-    function it_should_load_and_validate_in_one_step()
+    public function it_should_load_and_validate_in_one_step()
     {
         $this->validateConfiguration($this->getConfigurationFilePath())->shouldBeArray();
     }

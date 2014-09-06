@@ -11,7 +11,6 @@
 namespace Neoxygen\NeoConnect\HttpClient;
 
 use GuzzleHttp\Client;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Neoxygen\NeoConnect\Event\PreRequestSendEvent,
     Neoxygen\NeoConnect\Event\PostRequestSendEvent,
     Neoxygen\NeoConnect\Event\PreRequestCreateEvent,

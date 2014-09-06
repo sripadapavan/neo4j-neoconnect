@@ -50,6 +50,7 @@ class ConnectionManager
 
         if (null === $this->defaultConnection) {
             reset($this->connections);
+
             return current($this->connections);
         }
 
@@ -66,8 +67,12 @@ class ConnectionManager
         return true;
     }
 
-    public function getConnection($alias)
+    public function getConnection($alias = null)
     {
+        if (null === $alias) {
+            return $this->getDefaultConnection();
+        }
+
         if (!array_key_exists($alias, $this->connections)) {
             throw new \InvalidArgumentException(sprintf('Connection with alias "%s" does not exist', $alias));
         }

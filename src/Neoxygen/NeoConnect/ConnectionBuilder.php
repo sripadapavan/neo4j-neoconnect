@@ -52,7 +52,7 @@ class ConnectionBuilder
 
     public function loadConfigurationFromFile($file)
     {
-        if(!file_exists($file)) {
+        if (!file_exists($file)) {
             throw new \InvalidArgumentException('The file '.$file.' can not be found');
         }
         $config = Yaml::parse($file);

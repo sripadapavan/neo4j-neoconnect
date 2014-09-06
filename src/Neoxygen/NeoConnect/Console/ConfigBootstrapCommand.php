@@ -9,7 +9,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Yaml\Yaml;
-use Neoxygen\NeoConnect\Exception\BuildException;
 
 class ConfigBootstrapCommand extends BaseCommand
 {
