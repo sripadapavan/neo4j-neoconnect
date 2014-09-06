@@ -61,6 +61,34 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         }
     }
 
+    /**
+     * @Given There is a multiple connections configuration
+     */
+    public function thereIsAMultipleConnectionsConfiguration()
+    {
+        $genConfig = getcwd().'/neoconnect.yml';
+        $multipleTestConfig = getcwd().'/features/templates/multiple_connections_config.yml';
+        $fs = new Filesystem();
+        if ($fs->exists($genConfig)) {
+            $fs->remove($genConfig);
+        }
+        $fs->copy($multipleTestConfig, $genConfig);
+    }
+
+    /**
+     * @Then I can choose the :arg1 connection
+     */
+    public function iCanChooseTheConnection($alias)
+    {
+        $container = new ServiceContainer();
+        $container->loadConfiguration(getcwd().'/neoconnect.yml');
+        $container->loadServiceDefinitions();
+        $container->setConnections();
+        $manager = $container->getConnectionManager();
+        $conn = $manager->getConnection($alias);
+    }
+
+
     private function generateConfig()
     {
         $fs = new Filesystem();
