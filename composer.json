@@ -1,0 +1,50 @@
+{
+    "name": "neoxygen/neoconnect",
+    "type": "library",
+    "description": "NeoConnect is an open-source Neo4j ReST API Client for PHP",
+    "keywords": ["neo4j", "api", "client", "http", "cypher"],
+    "homepage": "http://www.neoxygen.org/kwark",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christophe Willemsen",
+            "email": "willemsen.christophe@gmail.com"
+        }
+    ],
+    "require":{
+        "php" : ">= 5.4",
+        "symfony/console" : "~2.5@dev",
+        "symfony/yaml" : "~2.5@dev",
+        "symfony/config" : "~2.5@dev",
+        "symfony/dependency-injection" : "~2.5@dev",
+        "symfony/event-dispatcher" : "~2.5@dev",
+        "guzzlehttp/guzzle" : "4.*",
+        "jms/serializer": "0.17.*@dev",
+        "doctrine/collections": "1.2.*@dev",
+        "symfony/filesystem": "~2.5@dev"
+    },
+    "require-dev": {
+        "monolog/monolog": "~1.3",
+        "phpunit/phpunit": "4.1.*",
+        "phpspec/phpspec": "~2.0",
+        "behat/behat": "~3.0.6",
+        "bossa/phpspec2-expect": "*"
+    },
+    "suggest": {
+        "monolog/monolog": "The recommended logging library to use with NeoConnect."
+    },
+    "autoload": {
+        "psr-4": {
+            "NeoConnect\\": "src/NeoConnect"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability":"dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.5-dev"
+        }
+    }
+}
