@@ -10,7 +10,6 @@ use Neoxygen\NeoConnect\Commit\CommitStrategyInterface,
     Neoxygen\NeoConnect\NeoConnectEvents,
     Neoxygen\NeoConnect\Event\QueueShouldNotBeFlushedEvent,
     Neoxygen\NeoConnect\Event\QueueShouldBeFlushedEvent,
-    Neoxygen\NeoConnect\Query\QueryManager,
     Neoxygen\NeoConnect\EventDispatcher\CAEventDispatcher;
 
 class CommitManager
@@ -24,12 +23,10 @@ class CommitManager
     public function __construct(
         ConnectionManager $connectionManager,
         CAEventDispatcher $eventDispatcher
-        //QueryManager $queryManager
         )
     {
         $this->connectionManager = $connectionManager;
         $this->eventDispatcher = $eventDispatcher;
-        //$this->queryManager = $queryManager;
     }
 
     public function registerCommitStrategy($strategyAlias, $strategyClass)
@@ -69,7 +66,7 @@ class CommitManager
         }
 
         if (!array_key_exists($strategyAlias, $this->loadedStrategies)) {
-            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias()];
+            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias];
 
             return $this->loadedStrategies[$strategyAlias];
         } else {

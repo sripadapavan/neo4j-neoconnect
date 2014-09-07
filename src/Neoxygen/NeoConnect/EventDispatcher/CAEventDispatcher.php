@@ -16,10 +16,12 @@ use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher,
 class CAEventDispatcher
 {
     protected $dispatcher;
+    public static $edispatcher;
 
     public function __construct(ContainerInterface $container)
     {
         $this->dispatcher = new ContainerAwareEventDispatcher($container);
+        self::$edispatcher = $this->dispatcher;
     }
 
     public function addSubscriberService($id, $class)
@@ -38,5 +40,11 @@ class CAEventDispatcher
     public function getDispatcher()
     {
         return $this->dispatcher;
+    }
+
+    public static function doDispatch($name, $event)
+    {
+        $di = self::$edispatcher;
+        $di->dispatch($name, $event);
     }
 }
