@@ -40,9 +40,9 @@ class Definition implements ConfigurationInterface
                         ->arrayNode('flush_strategy') // COMMIT STRATEGY
                             ->addDefaultsIfNotSet()
                             ->children() // COMMIT STRATEGY CHILDREN
-                                ->scalarNode('strategy')->isRequired()->canNotBeEmpty()->defaultValue('manual') //STRATEGY
+                                ->scalarNode('type')->isRequired()->canNotBeEmpty()->defaultValue('manual') //STRATEGY
                                     ->validate() // STRATEGY VALIDATION
-                                    ->ifNotInArray($supportStrategies)
+                                    ->ifNotInArray($supportedStrategies)
                                     ->thenInvalid('The commit strategy %s is not supported, please choose one of'.
                                     json_encode($supportedStrategies))
                                     ->end() // END VALIDATION
