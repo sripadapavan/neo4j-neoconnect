@@ -29,5 +29,6 @@ services:
 
   neoconnect.flusher:
     class: "%neoconnect.flusher.class%"
+    arguments: ["@neoconnect.connection_manager","@neoconnect.query_manager"]
     tags:
       - { name: flush.event_subscriber, class: "Flusher", service: "neoconnect.flusher" }

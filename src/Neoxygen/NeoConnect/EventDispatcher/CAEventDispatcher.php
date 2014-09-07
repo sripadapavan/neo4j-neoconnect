@@ -12,7 +12,6 @@ namespace Neoxygen\NeoConnect\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher,
     Symfony\Component\DependencyInjection\ContainerInterface;
-use Neoxygen\NeoConnect\Flusher\Flusher;
 
 class CAEventDispatcher
 {

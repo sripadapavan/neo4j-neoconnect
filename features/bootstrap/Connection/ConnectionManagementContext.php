@@ -39,7 +39,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         if (!$manager instanceof ConnectionManager) {
             throw new \Exception('Can not access the connection manager');
@@ -54,7 +54,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         $connection = $manager->getDefaultConnection();
         if ($connection->getAlias() !== 'default') {
@@ -84,7 +84,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         $conn = $manager->getConnection($alias);
     }
@@ -97,7 +97,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         $conn = $manager->getConnection();
     }
@@ -110,7 +110,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         $conn = $manager->getConnection();
         expect($conn->getAlias())->toBe('default');
@@ -133,7 +133,7 @@ class ConnectionManagementContext implements Context, SnippetAcceptingContext
         $container = new ServiceContainer();
         $container->loadConfiguration(getcwd().'/neoconnect.yml');
         $container->loadServiceDefinitions();
-        $container->setConnections();
+        $container->build();
         $manager = $container->getConnectionManager();
         expect($manager)->toThrow('\InvalidArgumentException')->during('getConnection', array($this->alias));
     }

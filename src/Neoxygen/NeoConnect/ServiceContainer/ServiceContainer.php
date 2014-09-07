@@ -122,7 +122,7 @@ class ServiceContainer
 
     public function registerStrategies()
     {
-        foreach($this->configuration['connections'] as $connection => $params) {
+        foreach ($this->configuration['connections'] as $connection => $params) {
             $strategy = $params['commit_strategy']['strategy'];
             $cm = $this->builder->get('neoconnect.commit_manager');
             $cm->registerCommitStrategy($strategy, $this->builder->getParameter('neoconnect.commit_strategy.'.$strategy.'.class'));

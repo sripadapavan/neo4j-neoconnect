@@ -2,14 +2,16 @@
 
 namespace Neoxygen\NeoConnect\Commit;
 
+use GuzzleHttp\Query;
 use Neoxygen\NeoConnect\Commit\CommitStrategyInterface,
     Neoxygen\NeoConnect\Connection\ConnectionManager,
     Neoxygen\NeoConnect\Query\Queue,
     Neoxygen\NeoConnect\Connection\Connection,
     Neoxygen\NeoConnect\NeoConnectEvents,
     Neoxygen\NeoConnect\Event\QueueShouldNotBeFlushedEvent,
-    Neoxygen\NeoConnect\Event\QueueShouldBeFlushedEvent;
-use Neoxygen\NeoConnect\EventDispatcher\CAEventDispatcher;
+    Neoxygen\NeoConnect\Event\QueueShouldBeFlushedEvent,
+    Neoxygen\NeoConnect\Query\QueryManager,
+    Neoxygen\NeoConnect\EventDispatcher\CAEventDispatcher;
 
 class CommitManager
 {
@@ -17,11 +19,17 @@ class CommitManager
     protected $loadedStrategies = array();
     protected $connectionManager;
     protected $eventDispatcher;
+    protected $queryManager;
 
-    public function __construct(ConnectionManager $connectionManager, CAEventDispatcher $eventDispatcher)
+    public function __construct(
+        ConnectionManager $connectionManager,
+        CAEventDispatcher $eventDispatcher
+        //QueryManager $queryManager
+        )
     {
         $this->connectionManager = $connectionManager;
         $this->eventDispatcher = $eventDispatcher;
+        //$this->queryManager = $queryManager;
     }
 
     public function registerCommitStrategy($strategyAlias, $strategyClass)
@@ -61,11 +69,22 @@ class CommitManager
         }
 
         if (!array_key_exists($strategyAlias, $this->loadedStrategies)) {
-            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias];
+            $this->loadedStrategies[$strategyAlias] = new $this->registeredStrategies[$strategyAlias()];
 
             return $this->loadedStrategies[$strategyAlias];
         } else {
             return $this->loadedStrategies[$strategyAlias];
+        }
+    }
+
+    public function implicitFlush($connectionAlias = null)
+    {
+        if (null === $connectionAlias) {
+            $connection = $this->connectionManager->getDefaultConnection();
+            $queue = $this->queryManager->getQueue($connection->getAlias());
+        } else {
+            $connection = $this->connectionManager->getConnection($connectionAlias);
+            $queue = $this->queryManager->getQueue($connectionAlias);
         }
     }
 

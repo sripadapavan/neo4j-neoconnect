@@ -62,6 +62,7 @@ class QueryManager
         }
 
         $this->commitManager->handleQueue($this->getQueue($connectionAlias));
+
         return true;
     }
 
