@@ -2,3 +2,7 @@ vendor/
 bin/behat
 bin/phpspec
 bin/phpunit
+index.php
+cache/
+logs/
+tmp/
