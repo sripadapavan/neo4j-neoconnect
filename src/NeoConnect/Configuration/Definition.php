@@ -22,7 +22,7 @@ class Definition implements ConfigurationInterface
         $rootNode = $treeBuilder->root('neoconnect');
 
         $supportedSchemes = array('http', 'https');
-        $supportedStrategies = array('manual', 'auto');
+        $supportedStrategies = array('manual', 'auto', 'custom');
 
         $rootNode->children() // Children
         ->arrayNode('connections') //Connections

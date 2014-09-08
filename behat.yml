@@ -1,8 +1,8 @@
 # Behat Configuration
-#default:
-#  suites:
-#    query:
-#      contexts:
-#        - Query\QueryManagementContext
-#      filters:
-#        tags: "@query_management"
+default:
+  suites:
+    statement:
+      contexts:
+        - Statement\StatementManagementContext
+      filters:
+        tags: "@statement"
