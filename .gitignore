@@ -6,3 +6,4 @@ index.php
 cache/
 logs/
 tmp/
+neoconnect.yml

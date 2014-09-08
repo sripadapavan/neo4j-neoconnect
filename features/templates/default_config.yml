@@ -4,8 +4,10 @@ neoconnect:
       scheme: http
       host: localhost
       port: 7474
-      flush_strategy:
-        type: manual
+
+  flush_strategy:
+    default:
+      strategy: manual_flush
 
 #    stats:
 #          scheme: http

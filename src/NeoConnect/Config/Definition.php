@@ -8,7 +8,7 @@
  * @license MIT License
  */
 
-namespace NeoConnect\Configuration;
+namespace NeoConnect\Config;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -22,7 +22,7 @@ class Definition implements ConfigurationInterface
         $rootNode = $treeBuilder->root('neoconnect');
 
         $supportedSchemes = array('http', 'https');
-        $supportedStrategies = array('manual', 'auto', 'custom');
+        $supportedStrategies = array('manual_flush', 'auto_flush', 'queue_limit_trigger_flush');
 
         $rootNode->children() // Children
         ->arrayNode('connections') //Connections
@@ -37,21 +37,22 @@ class Definition implements ConfigurationInterface
                         ->end() // END Scheme
                         ->scalarNode('host')->defaultValue('localhost')->end()
                         ->integerNode('port')->defaultValue('7474')->end()
-                        ->arrayNode('flush_strategy') // COMMIT STRATEGY
-                            ->addDefaultsIfNotSet()
-                            ->children() // COMMIT STRATEGY CHILDREN
-                                ->scalarNode('type')->isRequired()->canNotBeEmpty()->defaultValue('manual') //STRATEGY
-                                    ->validate() // STRATEGY VALIDATION
-                                    ->ifNotInArray($supportedStrategies)
-                                    ->thenInvalid('The commit strategy %s is not supported, please choose one of'.
-                                    json_encode($supportedStrategies))
-                                    ->end() // END VALIDATION
-                                ->end() // END STRATEGY
-                            ->end() // END COMMIT STRATEGY CHILDREN
-                        ->end() // END COMMIT STRATEGY
                     ->end() // End Prototype CH
                 ->end() // End Prototype
             ->end() // End Connections
+
+            ->arrayNode('flush_strategy') // FLUSH STRATEGY
+            ->prototype('array')
+                ->children()
+                    ->scalarNode('strategy')->defaultValue('manual_flush')
+                        ->validate()
+                        ->ifNotInArray($supportedStrategies)
+                        ->thenInvalid('The Flush Strategy %s is not valid, please choose one of '.json_encode($supportedStrategies))
+                        ->end()
+                    ->end() // END STRATEGY
+                ->end() // END FLUSH STRATEGY CHILDREN
+            ->end() //END PROTOTYPE
+            ->end() // END FLUSH STRATEGY
         ->end(); // END ROOT CHILDREN
 
         return $treeBuilder;

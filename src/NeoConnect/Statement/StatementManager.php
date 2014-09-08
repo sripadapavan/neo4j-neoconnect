@@ -10,13 +10,31 @@
 
 namespace NeoConnect\Statement;
 
-use NeoConnect\Statement\Statement;
+use NeoConnect\Statement\Statement,
+    NeoConnect\NeoEvents,
+    NeoConnect\Event\NeoKernelEvents\getStatementFromQueryEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class StatementManager
+class StatementManager implements EventSubscriberInterface
 {
 
     public function createStatement($query, array $parameters = array(), array $resultDataContents = array())
     {
         return new Statement($query, $parameters, $resultDataContents);
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            NeoEvents::NEO_KERNEL_STATEMENT => array(
+                'transformQueryToStatement'
+            )
+        );
+    }
+
+    public function transformQueryToStatement(getStatementFromQueryEvent $event)
+    {
+        $statement = $this->createStatement($event->getQuery(), $event->getParameters());
+        $event->setStatement($statement);
     }
 }

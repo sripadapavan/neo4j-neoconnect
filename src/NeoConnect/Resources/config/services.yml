@@ -1,0 +1,18 @@
+services:
+  neoconnect.statement_manager:
+    class: "NeoConnect\\Statement\\StatementManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
+  neoconnect.event_dispatcher:
+    class: "Symfony\\Component\\EventDispatcher\\ContainerAwareEventDispatcher"
+    arguments: ["@service_container"]
+
+  neoconnect.connection_manager:
+    class: "NeoConnect\\Connection\\ConnectionManager"
+
+  neoconnect.kernel:
+    class: "NeoConnect\\NeoKernel"
+    arguments:
+      - "@neoconnect.connection_manager"
+      - "@neoconnect.event_dispatcher"

@@ -6,3 +6,15 @@ default:
         - Statement\StatementManagementContext
       filters:
         tags: "@statement"
+
+    config:
+      contexts:
+        - Config\ConfigurationContext
+      filters:
+        tags: "@config"
+
+    service_container:
+      contexts:
+        - ServiceContainer\ServiceContainerContext
+      filters:
+        tags: "@container"
