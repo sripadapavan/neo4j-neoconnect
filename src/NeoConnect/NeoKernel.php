@@ -33,13 +33,17 @@ class NeoKernel
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function handleQuery($query, array $parameters = array(), $connection = null, array $resultDataContents = array())
+    public function handleQuery($query, array $parameters = array(), $connectionAlias = null, array $resultDataContents = array())
     {
-        $conn = $this->connectionManager->getConnection($connection);
+        $connection = $this->getConnection($connectionAlias);
 
-        $event = new getStatementFromQueryEvent($query, $parameters, $conn);
+        $event = new getStatementFromQueryEvent($query, $parameters, $connection);
         $this->eventDispatcher->dispatch(NeoEvents::NEO_KERNEL_STATEMENT, $event);
 
-        
+    }
+
+    public function getConnection($connectionAlias = null)
+    {
+        return $this->connectionManager->getConnection($connectionAlias);
     }
 }

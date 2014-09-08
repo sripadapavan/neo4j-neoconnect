@@ -10,7 +10,9 @@
 
 namespace NeoConnect;
 
-use NeoConnect\ServiceContainer\ServiceContainer;
+use NeoConnect\ServiceContainer\ServiceContainer,
+    NeoConnect\NeoEvents;
+use Symfony\Component\EventDispatcher\Event;
 
 class Neo
 {
@@ -18,6 +20,12 @@ class Neo
 
     private static $logger;
 
+    public static function sendQuery($query, array $parameters = array(), $connection = null, array $resultDataContents = array())
+    {
+        return self::$serviceContainer
+            ->getNeoKernel()
+            ->handleQuery($query, $parameters, $connection, $resultDataContents);
+    }
 
     public static function getServiceContainer()
     {
@@ -33,10 +41,20 @@ class Neo
         return self::$serviceContainer->getEventDispatcher();
     }
 
-    public static function sendQuery($query, array $parameters = array(), $connection = null, array $resultDataContents = array())
+    public static function getConnection($connectionAlias = nulls)
     {
-        return self::$serviceContainer->getNeoKernel()->handleQuery($query, $parameters, $connection, $resultDataContents);
+        return self::$serviceContainer
+            ->getNeoKernel()
+            ->getConnection($connectionAlias);
     }
+
+    public static function dispatch($eventConstant, Event $event)
+    {
+        return self::getEventDispatcher()
+            ->dispatch($eventConstant, $event);
+    }
+
+
 
 
 }

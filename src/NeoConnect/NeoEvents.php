@@ -12,11 +12,11 @@ namespace NeoConnect;
 
 final class NeoEvents
 {
-    const NEO_KERNEL_STATEMENT = 'neoaction.query.transform_to_statement';
+    const NEO_KERNEL_STATEMENT = 'neo_kernel.query_handler.transform_to_statement';
 
-    const NEO_KERNEL_QUEUE = 'neoaction.statement.add_to_queue';
+    const NEO_KERNEL_QUEUE = 'neo_kernel.query_handler.add_statement_to_queue';
 
-    const NEO_KERNEL_FLUSH_STRATEGY = 'neoaction.queue.perform_flush_strategy';
+    const NEO_KERNEL_FLUSH_STRATEGY = 'neo_kernel.query_handler.perform_flush_strategy';
 
-    const NEO_KERNEL_TRANSACTION = 'neoaction.queue.perform_commit';
+    const NEO_KERNEL_TRANSACTION = 'neo_kernel.query_handler.queue_commit';
 }
