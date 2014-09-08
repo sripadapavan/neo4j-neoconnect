@@ -8,15 +8,11 @@ use Behat\Behat\Context\Context,
     Behat\Gherkin\Node\TableNode,
     Behat\Behat\Tester\Exception\PendingException;
 
-use NeoConnect\Statement\StatementManager;
-
-
 /**
  * Defines application features from the specific context.
  */
 class ConfigurationContext implements Context, SnippetAcceptingContext
 {
-
 
     /**
      * @Given there is a :arg1 default config file present at the root of the project

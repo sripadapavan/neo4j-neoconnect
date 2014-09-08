@@ -32,7 +32,6 @@ class ServiceContainer
         return $this->serviceContainer->get('neoconnect.kernel');
     }
 
-
     public function getServiceContainer()
     {
         return $this->serviceContainer;

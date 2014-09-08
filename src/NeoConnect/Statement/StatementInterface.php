@@ -10,7 +10,7 @@
 
 namespace NeoConnect\Statement;
 
-interface StatementIterface
+interface StatementInterface
 {
     public function getQuery();
     public function setQuery($query);

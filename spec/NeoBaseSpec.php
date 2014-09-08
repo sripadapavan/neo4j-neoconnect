@@ -3,7 +3,6 @@
 namespace spec;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Symfony\Component\Filesystem\Filesystem;
 
 class NeoBaseSpec extends ObjectBehavior
@@ -11,7 +10,7 @@ class NeoBaseSpec extends ObjectBehavior
     public function getMatchers()
     {
         return [
-            'haveCountValues' => function($subject, $key) {
+            'haveCountValues' => function ($subject, $key) {
                 return array_count_values($subject) === $key;
             },
         ];

@@ -62,7 +62,7 @@ class Connection
     public function setPort($port)
     {
         if (!is_int($port)) {
-            throw New \InvalidArgumentException('Port must be integer');
+            throw new \InvalidArgumentException('Port must be integer');
         }
 
         $this->port = $port;

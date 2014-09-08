@@ -10,7 +10,6 @@
 
 namespace NeoConnect\Config;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use NeoConnect\Config\Definition,
     NeoConnect\Config\Loader;
 use Symfony\Component\Config\Definition\Processor,

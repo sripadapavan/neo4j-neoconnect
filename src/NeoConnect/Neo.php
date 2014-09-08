@@ -54,7 +54,4 @@ class Neo
             ->dispatch($eventConstant, $event);
     }
 
-
-
-
 }

@@ -10,7 +10,6 @@ use Behat\Behat\Context\Context,
 
 use NeoConnect\Statement\StatementManager;
 
-
 /**
  * Defines application features from the specific context.
  */
