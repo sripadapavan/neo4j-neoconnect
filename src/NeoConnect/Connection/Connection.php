@@ -20,6 +20,7 @@ class Connection
     private $host;
     private $port;
     private $rootEndpoint;
+    private $flushStrategy;
 
     public function __construct($alias)
     {
@@ -76,5 +77,15 @@ class Connection
     public function setRootEndpoint($endpoint)
     {
         $this->rootEndpoint = (string) $endpoint;
+    }
+
+    public function getFlushStrategy()
+    {
+        return $this->flushStrategy;
+    }
+
+    public function setFlushStrategy($strategy)
+    {
+        $this->flushStrategy = (string) $strategy;
     }
 }

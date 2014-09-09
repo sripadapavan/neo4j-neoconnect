@@ -90,4 +90,10 @@ class ServiceContainerSpec extends NeoBaseSpec
         $this->build();
         $this->getConnectionManager()->getDefaultConnection()->getAlias()->shouldReturn('default');
     }
+
+    public function it_should_register_default_flush_strategy_to_connections_if_nothing_provided()
+    {
+        $this->loadConfiguration($this->createConfig());
+        $this->build();
+    }
 }

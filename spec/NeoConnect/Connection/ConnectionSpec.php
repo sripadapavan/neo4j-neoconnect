@@ -74,4 +74,15 @@ class ConnectionSpec extends NeoBaseSpec
         $this->setRootEndpoint('http://localhost:7474');
         $this->getRootEndpoint()->shouldReturn('http://localhost:7474');
     }
+
+    public function it_should_have_a_flush_strategy_accessor()
+    {
+        $this->getFlushStrategy()->shouldBeNull();
+    }
+
+    public function its_flush_strategy_should_be_mutable()
+    {
+        $this->setFlushStrategy('manual_flush');
+        $this->getFlushStrategy()->shouldReturn('manual_flush');
+    }
 }
