@@ -32,7 +32,7 @@ class StatementManagerSpec extends NeoBaseSpec
 
     public function it_should_subscribe_to_neo_kernel_statement_event()
     {
-        $this->getSubscribedEvents()->shouldHaveKey('neo_kernel.query_handler.transform_to_statement');
+        $this->getSubscribedEvents()->shouldHaveKey('neo_kernel.get_statement_for_query');
     }
 
     public function it_should_handle_the_event(getStatementFromQueryEvent $event, Statement $statement)

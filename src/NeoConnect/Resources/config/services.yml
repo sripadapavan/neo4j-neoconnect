@@ -16,6 +16,16 @@ services:
   neoconnect.connection_manager:
     class: "NeoConnect\\Connection\\ConnectionManager"
 
+  neoconnect.flush_strategy_manager:
+    class: "NeoConnect\\FlushStrategy\\FlushStrategyManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
+  neoconnect.queue_manager:
+    class: "NeoConnect\\Queue\\QueueManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
   neoconnect.kernel:
     class: "NeoConnect\\NeoKernel"
     arguments:

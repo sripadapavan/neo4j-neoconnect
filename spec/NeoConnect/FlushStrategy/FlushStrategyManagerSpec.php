@@ -2,8 +2,14 @@
 
 namespace spec\NeoConnect\FlushStrategy;
 
+use NeoConnect\Queue\Queue;
+use Prophecy\Argument;
 use spec\NeoBaseSpec;
-use NeoConnect\FlushStrategy\ManualFlushStrategy;
+use NeoConnect\FlushStrategy\ManualFlushStrategy,
+    NeoConnect\Connection\Connection,
+    NeoConnect\Queue\QueueManager,
+    NeoConnect\Statement\Statement,
+    NeoConnect\Event\NeoKernelEvents\applyStrategyForQueueEvent;
 
 class FlushStrategyManagerSpec extends NeoBaseSpec
 {
@@ -44,5 +50,41 @@ class FlushStrategyManagerSpec extends NeoBaseSpec
     {
         $this->registerStrategyService('manual_flush', $strategy);
         $this->shouldThrow('NeoConnect\Exception\StrategyException')->duringSetDefaultStrategy('custom_flush');
+    }
+
+    public function it_should_subscribe_to_the_apply_flush_strategy_event()
+    {
+        $this->getSubscribedEvents()->shouldHaveKey('neo_kernel.apply_flush_strategy');
+    }
+
+    function it_should_get_a_strategy_for_connection(ManualFlushStrategy $strategy)
+    {
+        $this->registerStrategyService('manual_flush', $strategy);
+        $this->setDefaultStrategy('manual_flush');
+        $conn = new Connection('default');
+        $conn->setFlushStrategy('manual_flush');
+        $this->findStrategy($conn)->shouldHaveType('NeoConnect\FlushStrategy\ManualFlushStrategy');
+    }
+
+    function it_should_ask_the_strategy_for_the_flush(ManualFlushStrategy $strategy)
+    {
+        $this->registerStrategyService('manual_flush', $strategy);
+        $strategy->performFlushDecision(Argument::any(), Argument::any())->willReturn(false);
+        $this->applyFlushStrategy($this->getEvent());
+        $this->getApplyFlushStrategyEvent()->isFlushOrdered()->shouldReturn(false);
+        $this->getApplyFlushStrategyEvent()->isFlushOrdered()->shouldNotBeNull();
+    }
+
+    private function getEvent()
+    {
+        $conn = new Connection('default');
+        $conn->setFlushStrategy('manual_flush');
+        $st = new Statement('match (n) return n');
+        $q = new Queue('default');
+        $q->addStatement($st);
+
+        $event = new applyStrategyForQueueEvent($q, $conn);
+
+        return $event;
     }
 }

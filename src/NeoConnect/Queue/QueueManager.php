@@ -10,10 +10,12 @@
 
 namespace NeoConnect\Queue;
 
+use NeoConnect\NeoEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use NeoConnect\Connection\Connection,
     NeoConnect\Statement\Statement,
-    NeoConnect\Queue\Queue;
+    NeoConnect\Queue\Queue,
+    NeoConnect\Event\NeoKernelEvents\getQueueForStatementEvent;
 
 class QueueManager implements EventSubscriberInterface
 {
@@ -34,7 +36,9 @@ class QueueManager implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-
+            NeoEvents::NEO_KERNEL_QUEUE => array(
+                'getQueueForStatement'
+            )
         );
     }
 
@@ -58,6 +62,7 @@ class QueueManager implements EventSubscriberInterface
         if (!$this->hasQueue($connection)) {
             throw new \InvalidArgumentException(sprintf('The queue for connection "%s" does not exist', $connection->getAlias()));
         }
+
         return $this->queues[$connection->getAlias()];
     }
 
@@ -77,5 +82,16 @@ class QueueManager implements EventSubscriberInterface
         }
 
         return $this->queues[$connectionAlias];
+    }
+
+    public function getQueueForStatement(getQueueForStatementEvent $event)
+    {
+        $connection = $event->getConnection();
+        $statement = $event->getStatement();
+
+        $this->createQueue($connection);
+        $this->getQueue($connection)->addStatement($statement);
+
+        $event->setQueue($this->getQueue($connection));
     }
 }

@@ -51,7 +51,6 @@ class Queue
     public function getState()
     {
         if ($this->isEmpty()) {
-
             return self::EMPTY_STATE;
         }
 

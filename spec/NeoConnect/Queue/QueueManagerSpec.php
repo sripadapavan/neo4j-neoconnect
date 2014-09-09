@@ -5,7 +5,8 @@ namespace spec\NeoConnect\Queue;
 use Prophecy\Argument;
 use spec\NeoBaseSpec;
 use NeoConnect\Connection\Connection,
-    NeoConnect\Statement\Statement;
+    NeoConnect\Statement\Statement,
+    NeoConnect\Event\NeoKernelEvents\getQueueForStatementEvent;
 
 class QueueManagerSpec extends NeoBaseSpec
 {
@@ -70,6 +71,28 @@ class QueueManagerSpec extends NeoBaseSpec
         $this->getQueueForAlias('default')->shouldHaveType('NeoConnect\Queue\Queue');
     }
 
+    function it_should_handle_a_get_queue_for_statement_event()
+    {
+        $ev = $this->getEvent();
+        $this->getQueueForStatement($ev);
+        $this->getQueues()->shouldHaveCount(1);
+        $this->getQueueState($ev->getConnection())->shouldReturn(1);
+    }
+
+    function it_should_subscribe_to_the_queue_kernel_event()
+    {
+        $this->getSubscribedEvents()->shouldHaveKey('neo_kernel.get_queue_for_statement');
+    }
+
+    private function getEvent()
+    {
+        $st = $this->getStatement();
+        $conn = $this->getConnection();
+        $event = new getQueueForStatementEvent($st, $conn);
+
+        return $event;
+    }
+
     private function getConnection()
     {
         $conn = new Connection('default');
@@ -81,8 +104,4 @@ class QueueManagerSpec extends NeoBaseSpec
     {
         return new Statement('match (n) return n');
     }
-
-
-
-
 }

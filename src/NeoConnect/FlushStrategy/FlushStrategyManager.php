@@ -10,14 +10,18 @@
 
 namespace NeoConnect\FlushStrategy;
 
+use NeoConnect\NeoEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use NeoConnect\FlushStrategy\FlushStrategyInterface,
-    NeoConnect\Exception\StrategyException;
+    NeoConnect\Exception\StrategyException,
+    NeoConnect\Connection\Connection,
+    NeoConnect\Event\NeoKernelEvents\applyStrategyForQueueEvent;
 
 class FlushStrategyManager implements EventSubscriberInterface
 {
     private $strategies;
     private $defaultStrategy;
+    private $applyFlushStrategyEvent;
 
     public function __construct()
     {
@@ -26,7 +30,11 @@ class FlushStrategyManager implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array();
+        return array(
+            NeoEvents::NEO_KERNEL_FLUSH_STRATEGY => array(
+                'applyFlushStrategy'
+            )
+        );
     }
 
     public function registerStrategyService($strategyAlias, FlushStrategyInterface $strategy)
@@ -53,5 +61,24 @@ class FlushStrategyManager implements EventSubscriberInterface
             throw new StrategyException(sprintf('The strategy "%s" is not registered', $strategyAlias));
         }
         $this->defaultStrategy = $strategyAlias;
+    }
+
+    public function applyFlushStrategy(applyStrategyForQueueEvent $event)
+    {
+        $this->applyFlushStrategyEvent = $event;
+        $strategy = $this->findStrategy($event->getConnection());
+        $decision = $strategy->performFlushDecision($event->getQueue()) ? true : false;
+
+        $event->setFlushDecision($decision);
+    }
+
+    public function getApplyFlushStrategyEvent()
+    {
+        return $this->applyFlushStrategyEvent;
+    }
+
+    public function findStrategy(Connection $connection)
+    {
+        return $this->getStrategy($connection->getFlushStrategy());
     }
 }

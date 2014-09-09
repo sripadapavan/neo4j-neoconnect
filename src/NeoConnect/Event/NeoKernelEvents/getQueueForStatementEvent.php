@@ -12,43 +12,21 @@ namespace NeoConnect\Event\NeoKernelEvents;
 
 use Symfony\Component\EventDispatcher\Event;
 use NeoConnect\Connection\Connection,
-    NeoConnect\Statement\Statement;
+    NeoConnect\Statement\Statement,
+    NeoConnect\Queue\Queue;
 
-class getStatementFromQueryEvent extends Event
+class getQueueForStatementEvent extends Event
 {
-    protected $query;
-
-    protected $parameters;
+    protected $queue;
 
     protected $connection;
 
     protected $statement;
 
-    public function __construct($query, $parameters, Connection $connection)
+    public function __construct(Statement $statement, Connection $connection)
     {
-        $this->query = $query;
-        $this->parameters = $parameters;
+        $this->statement = $statement;
         $this->connection = $connection;
-    }
-
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    public function setQuery($query)
-    {
-        $this->query = (string) $query;
-    }
-
-    public function setParameters(array $parameters = array())
-    {
-        $this->parameters = $parameters;
     }
 
     public function getStatement()
@@ -74,5 +52,20 @@ class getStatementFromQueryEvent extends Event
     public function setConnection(Connection $connection)
     {
         $this->connection = $connection;
+    }
+
+    public function setQueue(Queue $queue)
+    {
+        $this->queue = $queue;
+    }
+
+    public function getQueue()
+    {
+        return $this->queue;
+    }
+
+    public function hasQueue()
+    {
+        return null !== $this->queue;
     }
 }

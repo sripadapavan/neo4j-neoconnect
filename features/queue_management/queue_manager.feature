@@ -30,4 +30,4 @@ Feature: Queue Management
     Given there is a multiple connections configuration
     And the application run
     When the Queue Manager receive a statement for the "connection2" connection
-    The he should add it to the "connection2" queue
+    Then he should add it to the "connection2" queue
