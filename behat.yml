@@ -18,3 +18,7 @@ default:
         - ServiceContainer\ServiceContainerContext
       filters:
         tags: "@container"
+
+    queue:
+      contexts:
+        - Queue\QueueManagementContext

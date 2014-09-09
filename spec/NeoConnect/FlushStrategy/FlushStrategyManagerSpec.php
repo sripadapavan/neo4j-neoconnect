@@ -57,7 +57,7 @@ class FlushStrategyManagerSpec extends NeoBaseSpec
         $this->getSubscribedEvents()->shouldHaveKey('neo_kernel.apply_flush_strategy');
     }
 
-    function it_should_get_a_strategy_for_connection(ManualFlushStrategy $strategy)
+    public function it_should_get_a_strategy_for_connection(ManualFlushStrategy $strategy)
     {
         $this->registerStrategyService('manual_flush', $strategy);
         $this->setDefaultStrategy('manual_flush');
@@ -66,7 +66,7 @@ class FlushStrategyManagerSpec extends NeoBaseSpec
         $this->findStrategy($conn)->shouldHaveType('NeoConnect\FlushStrategy\ManualFlushStrategy');
     }
 
-    function it_should_ask_the_strategy_for_the_flush(ManualFlushStrategy $strategy)
+    public function it_should_ask_the_strategy_for_the_flush(ManualFlushStrategy $strategy)
     {
         $this->registerStrategyService('manual_flush', $strategy);
         $strategy->performFlushDecision(Argument::any(), Argument::any())->willReturn(false);

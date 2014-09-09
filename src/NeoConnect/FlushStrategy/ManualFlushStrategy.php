@@ -11,12 +11,13 @@
 namespace NeoConnect\FlushStrategy;
 
 use NeoConnect\FlushStrategy\AbstractFlushStrategy,
-    NeoConnect\NeoEvents;
+    NeoConnect\NeoEvents,
+    NeoConnect\Queue\Queue;
 
 class ManualFlushStrategy extends AbstractFlushStrategy
 {
 
-    public function performFlushDecision($queue, $connection)
+    public function performFlushDecision(Queue $queue)
     {
         return false;
     }

@@ -76,4 +76,18 @@ class ConnectionManager
 
         $this->defaultConnection = $connectionAlias;
     }
+
+    public function assignFlushStrategy($connectionAlias, $strategyAlias)
+    {
+        $this->getConnection($connectionAlias)->setFlushStrategy($strategyAlias);
+    }
+
+    public function assignDefaultStrategy($defaultStrategy)
+    {
+        foreach ($this->getConnections() as $connection) {
+            if (!$connection->hasFlushStrategy()) {
+                $connection->setFlushStrategy($defaultStrategy);
+            }
+        }
+    }
 }

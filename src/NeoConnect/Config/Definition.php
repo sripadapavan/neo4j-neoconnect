@@ -51,6 +51,13 @@ class Definition implements ConfigurationInterface
                     ->end() // END STRATEGY
                 ->end() // END FLUSH STRATEGY CHILDREN
             ->end() //END PROTOTYPE
+            ->end()
+            ->arrayNode('flush_strategy_classes')
+            ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('manual_flush')->defaultValue('NeoConnect\FlushStrategy\ManualFlushStrategy')->end()
+                ->end()
+
             ->end() // END FLUSH STRATEGY
         ->end(); // END ROOT CHILDREN
 

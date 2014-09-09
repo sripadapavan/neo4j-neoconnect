@@ -10,7 +10,9 @@
 
 namespace NeoConnect\FlushStrategy;
 
+use NeoConnect\Queue\Queue;
+
 interface FlushStrategyInterface
 {
-    public function performFlushDecision($queue, $connection);
+    public function performFlushDecision(Queue $queue);
 }

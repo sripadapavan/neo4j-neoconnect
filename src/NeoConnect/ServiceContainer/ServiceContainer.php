@@ -14,7 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
     Symfony\Component\Config\FileLocator;
 use NeoConnect\Config\Validator,
-    NeoConnect\ServiceContainer\NeoKernelSubscribersPass;
+    NeoConnect\ServiceContainer\NeoKernelSubscribersPass,
+    NeoConnect\ServiceContainer\FlushStrategyServicesPass,
+    NeoConnect\ServiceContainer\RegisterConnectionsCompilerPass;
 
 class ServiceContainer
 {
@@ -70,8 +72,9 @@ class ServiceContainer
     public function build()
     {
         $this->loadServiceDefinitions();
+        $this->serviceContainer->addCompilerPass(new RegisterConnectionsCompilerPass($this->processedConfig));
+        $this->serviceContainer->addCompilerPass(new FlushStrategyServicesPass($this->processedConfig));
         $this->compile();
-        $this->registerConnections();
 
         return $this;
     }
@@ -84,6 +87,16 @@ class ServiceContainer
     public function getConnectionManager()
     {
         return $this->serviceContainer->get('neoconnect.connection_manager');
+    }
+
+    public function getQueueManager()
+    {
+        return $this->serviceContainer->get('neoconnect.queue_manager');
+    }
+
+    public function getKernel()
+    {
+        return $this->serviceContainer->get('neoconnect.kernel');
     }
 
     public function registerConnections()

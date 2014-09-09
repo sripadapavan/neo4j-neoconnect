@@ -2,8 +2,8 @@
 
 namespace spec\NeoConnect\FlushStrategy;
 
-use Prophecy\Argument;
 use spec\NeoBaseSpec;
+use NeoConnect\Queue\Queue;
 
 class ManualFlushStrategySpec extends NeoBaseSpec
 {
@@ -14,6 +14,7 @@ class ManualFlushStrategySpec extends NeoBaseSpec
 
     public function it_should_return_false_for_flush()
     {
-        $this->performFlushDecision(Argument::any(), Argument::any())->shouldReturn(false);
+        $queue = new Queue('default');
+        $this->performFlushDecision($queue)->shouldReturn(false);
     }
 }

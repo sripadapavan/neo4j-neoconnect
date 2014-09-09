@@ -88,4 +88,9 @@ class Connection
     {
         $this->flushStrategy = (string) $strategy;
     }
+
+    public function hasFlushStrategy()
+    {
+        return null !== $this->flushStrategy;
+    }
 }
