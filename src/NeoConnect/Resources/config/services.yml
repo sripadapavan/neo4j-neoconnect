@@ -31,3 +31,6 @@ services:
     arguments:
       - "@neoconnect.connection_manager"
       - "@neoconnect.event_dispatcher"
+
+  neoconnect.http_client:
+    class: "NeoConnect\\HttpClient\\GuzzleHttpClient"

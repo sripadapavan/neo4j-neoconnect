@@ -10,7 +10,10 @@
 
 namespace NeoConnect\Connection;
 
-use NeoConnect\Exception\InvalidSchemeException;
+use NeoConnect\Exception\ConnectionException;
+use NeoConnect\Exception\InvalidSchemeException,
+    NeoConnect\HttpClient\HttpClientInterface,
+    NeoConnect\Discovery\ApiDiscovery;
 
 class Connection
 {
@@ -19,8 +22,11 @@ class Connection
     private $scheme;
     private $host;
     private $port;
+    private $baseUrl;
     private $rootEndpoint;
     private $flushStrategy;
+    private $httpClient;
+    private $apiDiscovery;
 
     public function __construct($alias)
     {
@@ -69,8 +75,22 @@ class Connection
         $this->port = $port;
     }
 
-    public function getRootEndpoint()
+    public function getRootEndpoint($discoveryTrigger = false)
     {
+        if ($discoveryTrigger && !$this->apiDiscovery) {
+            if (null === $this->httpClient) {
+                throw new ConnectionException('The HttpClient is not available');
+            }
+            $this->apiDiscovery = new ApiDiscovery();
+            $this->apiDiscovery->processApiDiscovery($this->baseUrl, $this->httpClient);
+
+            return $this->apiDiscovery->getRoot();
+
+        } elseif ($this->apiDiscovery) {
+
+            return $this->apiDiscovery->getRoot();
+        }
+
         return $this->rootEndpoint;
     }
 
@@ -92,5 +112,20 @@ class Connection
     public function hasFlushStrategy()
     {
         return null !== $this->flushStrategy;
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    public function setBaseUrl($url)
+    {
+        $this->baseUrl = $url;
     }
 }

@@ -99,6 +99,11 @@ class ServiceContainer
         return $this->serviceContainer->get('neoconnect.kernel');
     }
 
+    public function getHttpClient()
+    {
+        return $this->serviceContainer->get('neoconnect.http_client');
+    }
+
     public function registerConnections()
     {
         $this->getConnectionManager()->createConnections($this->processedConfig);

@@ -2,7 +2,9 @@
 
 namespace spec\NeoConnect\Connection;
 
+use Prophecy\Argument;
 use spec\NeoBaseSpec;
+use NeoConnect\HttpClient\GuzzleHttpClient;
 
 class ConnectionSpec extends NeoBaseSpec
 {
@@ -67,6 +69,18 @@ class ConnectionSpec extends NeoBaseSpec
     public function it_should_have_a_root_endpoint_accessor()
     {
         $this->getRootEndpoint()->shouldBeNull();
+    }
+
+    function it_should_return_root_endpoint_url_if_discovery_is_triggered(GuzzleHttpClient $client)
+    {
+        $this->setBaseUrl('http://localhost:7474');
+        $this->setHttpClient($client);
+        $client->send(Argument::any(), Argument::any())->willReturn(array(
+            'management' => 'http://localhost:7474/db/manage',
+            'data' => 'http://http://localhost:7474/db/data'
+        ));
+        $this->getRootEndpoint(true)->shouldHaveCount(2);
+
     }
 
     public function its_root_endpoint_should_be_mutable()

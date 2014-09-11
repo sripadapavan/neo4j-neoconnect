@@ -107,4 +107,9 @@ class Neo
             ->dispatch($eventConstant, $event);
     }
 
+    public static function getHttpClient()
+    {
+        return self::$serviceContainer->getHttpClient();
+    }
+
 }
