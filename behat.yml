@@ -1,0 +1,24 @@
+# Behat Configuration
+default:
+  suites:
+    statement:
+      contexts:
+        - Statement\StatementManagementContext
+      filters:
+        tags: "@statement"
+
+    config:
+      contexts:
+        - Config\ConfigurationContext
+      filters:
+        tags: "@config"
+
+    service_container:
+      contexts:
+        - ServiceContainer\ServiceContainerContext
+      filters:
+        tags: "@container"
+
+    queue:
+      contexts:
+        - Queue\QueueManagementContext

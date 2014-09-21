@@ -1,0 +1,22 @@
+neoconnect:
+  connections:
+    default:
+      scheme: http
+      host: localhost
+      port: 7474
+
+  flush_strategy:
+    default:
+      strategy: manual_flush
+
+#    stats:
+#          scheme: http
+#          host: localhost
+#          port: 7474
+#          flush_strategy:
+#            type: custom
+#            alias: check_maintenance
+#            class: "My\\Custom\\Strategy\\Class"
+#            inject:
+#              - { parameter: "%neoconnect.flush_strategy.manual.class%" }
+#              - { service: "@neoconnect.http_client" }

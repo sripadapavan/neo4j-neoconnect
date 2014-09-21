@@ -1,0 +1,40 @@
+parameters:
+  neoconnect.default_flush_strategy: manual_flush
+  neoconnect.default_flush_strategy_classes:
+    - manual_flush: "NeoConnect\\FlushStrategy\\ManualFlushStrategy"
+
+services:
+  neoconnect.statement_manager:
+    class: "NeoConnect\\Statement\\StatementManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
+  neoconnect.event_dispatcher:
+    class: "Symfony\\Component\\EventDispatcher\\ContainerAwareEventDispatcher"
+    arguments: ["@service_container"]
+
+  neoconnect.connection_manager:
+    class: "NeoConnect\\Connection\\ConnectionManager"
+
+  neoconnect.flush_strategy_manager:
+    class: "NeoConnect\\FlushStrategy\\FlushStrategyManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
+  neoconnect.queue_manager:
+    class: "NeoConnect\\Queue\\QueueManager"
+    tags:
+      - { name: neo_kernel.event_subscriber }
+
+  neoconnect.kernel:
+    class: "NeoConnect\\NeoKernel"
+    arguments:
+      - "@neoconnect.connection_manager"
+      - "@neoconnect.event_dispatcher"
+
+  neoconnect.http_client:
+    class: "NeoConnect\\HttpClient\\GuzzleHttpClient"
+
+  neoconnect.transaction_manager:
+    class: "NeoConnect\\Transaction\\TransactionManager"
+    arguments: ["@neoconnect.http_client"]
