@@ -4,13 +4,19 @@ namespace spec\NeoConnect\Transaction;
 
 use spec\NeoBaseSpec;
 use NeoConnect\Connection\Connection,
-    NeoConnect\Queue\Queue;
+    NeoConnect\Queue\Queue,
+    NeoConnect\HttpClient\GuzzleHttpClient;
 
 class TransactionManagerSpec extends NeoBaseSpec
 {
-    function let()
+    function let(GuzzleHttpClient $client)
     {
+        $this->beConstructedWith($client);
+    }
 
+    function it_should_have_an_http_client_by_default()
+    {
+        $this->getHttpClient()->shouldHaveType('NeoConnect\HttpClient\GuzzleHttpClient');
     }
 
     function it_is_initializable()
@@ -42,7 +48,7 @@ class TransactionManagerSpec extends NeoBaseSpec
 
     private function getConnection()
     {
-        return new Connection('default');
+        return new Connection('default', 'http', 'localhost', 7474);
     }
 
     private function getQueue()

@@ -34,3 +34,7 @@ services:
 
   neoconnect.http_client:
     class: "NeoConnect\\HttpClient\\GuzzleHttpClient"
+
+  neoconnect.transaction_manager:
+    class: "NeoConnect\\Transaction\\TransactionManager"
+    arguments: ["@neoconnect.http_client"]

@@ -61,7 +61,7 @@ class FlushStrategyManagerSpec extends NeoBaseSpec
     {
         $this->registerStrategyService('manual_flush', $strategy);
         $this->setDefaultStrategy('manual_flush');
-        $conn = new Connection('default');
+        $conn = new Connection('default', 'http', 'localhost', 7474);
         $conn->setFlushStrategy('manual_flush');
         $this->findStrategy($conn)->shouldHaveType('NeoConnect\FlushStrategy\ManualFlushStrategy');
     }
@@ -77,7 +77,7 @@ class FlushStrategyManagerSpec extends NeoBaseSpec
 
     private function getEvent()
     {
-        $conn = new Connection('default');
+        $conn = new Connection('default', 'http', 'localhost', 7474);
         $conn->setFlushStrategy('manual_flush');
         $st = new Statement('match (n) return n');
         $q = new Queue('default');

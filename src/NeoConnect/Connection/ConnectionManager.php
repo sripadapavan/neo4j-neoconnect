@@ -47,10 +47,12 @@ class ConnectionManager
     public function createConnections(array $connections = array())
     {
         foreach ($connections['connections'] as $connectionAlias => $settings) {
-            $con = new Connection($connectionAlias);
-            $con->setScheme($settings['scheme']);
-            $con->setHost($settings['host']);
-            $con->setPort($settings['port']);
+            $con = new Connection(
+                $connectionAlias,
+                $settings['scheme'],
+                $settings['host'],
+                $settings['port']
+            );
             $this->connections[$connectionAlias] = $con;
         }
     }

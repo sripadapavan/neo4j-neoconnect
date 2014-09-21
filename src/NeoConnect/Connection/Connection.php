@@ -22,15 +22,30 @@ class Connection
     private $scheme;
     private $host;
     private $port;
-    private $baseUrl;
     private $rootEndpoint;
+    private $endpoints;
     private $flushStrategy;
-    private $httpClient;
-    private $apiDiscovery;
+    private $defaultEndpoints = array(
+        'root' => '/',
+        'management' => '/db/management',
+        'data' => '/db/data',
+        'data.node' => '/db/data/nodes',
+        'data.relationships' => '/db/data/relationships',
+        'data.transaction' => '/db/data/transaction',
+        'data.transaction_single_commit' => '/db/data/transaction/commit',
+        'data.transaction_full_commit' => '/db/data/transaction/{id}/commit',
+        'data.extensions' => '/db/data/extensions',
+        'data.labels' => '/db/data/labels',
+        'data.constraints' => '/db/data/schema/constraint',
+        'data.indexes' => '/db/data/schema/index',
+    );
 
-    public function __construct($alias)
+    public function __construct($alias, $scheme, $host, $port)
     {
         $this->alias = (string) $alias;
+        $this->setScheme($scheme);
+        $this->setHost($host);
+        $this->setPort($port);
     }
 
     public function getAlias()
@@ -75,28 +90,14 @@ class Connection
         $this->port = $port;
     }
 
-    public function getRootEndpoint($discoveryTrigger = false)
+    public function getRootEndpoint()
     {
-        if ($discoveryTrigger && !$this->apiDiscovery) {
-            if (null === $this->httpClient) {
-                throw new ConnectionException('The HttpClient is not available');
-            }
-            $this->apiDiscovery = new ApiDiscovery();
-            $this->apiDiscovery->processApiDiscovery($this->baseUrl, $this->httpClient);
-
-            return $this->apiDiscovery->getRoot();
-
-        } elseif ($this->apiDiscovery) {
-
-            return $this->apiDiscovery->getRoot();
-        }
-
-        return $this->rootEndpoint;
+        return $this->getEndpoint('root');
     }
 
-    public function setRootEndpoint($endpoint)
+    public function getTransactionEndpoint()
     {
-        $this->rootEndpoint = (string) $endpoint;
+        return $this->getEndpoint('data.transaction');
     }
 
     public function getFlushStrategy()
@@ -114,18 +115,33 @@ class Connection
         return null !== $this->flushStrategy;
     }
 
-    public function setHttpClient(HttpClientInterface $httpClient)
-    {
-        $this->httpClient = $httpClient;
-    }
-
     public function getBaseUrl()
     {
-        return $this->baseUrl;
+        return $this->scheme . '://' .$this->host . ':' .$this->port;
     }
 
-    public function setBaseUrl($url)
+    public function getEndpoints()
     {
-        $this->baseUrl = $url;
+        return $this->endpoints;
+    }
+
+    private function getEndpoint($key)
+    {
+        return $this->getBaseUrl() . $this->defaultEndpoints[$key];
+    }
+
+    public function getIndexesEndpoint()
+    {
+        return $this->getEndpoint('data.indexes');
+    }
+
+    public function getConstraintsEndpoint()
+    {
+        return $this->getEndpoint('data.constraints');
+    }
+
+    public function getLabelsEndpoint()
+    {
+        return $this->getEndpoint('data.labels');
     }
 }

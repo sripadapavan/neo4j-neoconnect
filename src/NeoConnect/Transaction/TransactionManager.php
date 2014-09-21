@@ -13,15 +13,19 @@ namespace NeoConnect\Transaction;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use NeoConnect\Transaction\Transaction,
     NeoConnect\Connection\Connection,
-    NeoConnect\Queue\Queue;
+    NeoConnect\Queue\Queue,
+    NeoConnect\HttpClient\HttpClientInterface;
 
 class TransactionManager implements EventSubscriberInterface
 {
     private $transactions;
 
-    public function __construct()
+    private $httpClient;
+
+    public function __construct(HttpClientInterface $httpClient)
     {
         $this->transactions = array();
+        $this->httpClient = $httpClient;
     }
 
     public static function getSubscribedEvents()
@@ -40,5 +44,10 @@ class TransactionManager implements EventSubscriberInterface
         $this->transactions[$connection->getAlias()] = $tx;
 
         return $this;
+    }
+
+    public function getHttpClient()
+    {
+        return $this->httpClient;
     }
 }

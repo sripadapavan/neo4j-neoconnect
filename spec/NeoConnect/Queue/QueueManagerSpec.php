@@ -94,7 +94,7 @@ class QueueManagerSpec extends NeoBaseSpec
 
     private function getConnection()
     {
-        $conn = new Connection('default');
+        $conn = new Connection('default', 'http', 'localhost', 7474);
 
         return $conn;
     }

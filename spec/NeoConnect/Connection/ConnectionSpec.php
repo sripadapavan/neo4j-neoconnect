@@ -8,95 +8,102 @@ use NeoConnect\HttpClient\GuzzleHttpClient;
 
 class ConnectionSpec extends NeoBaseSpec
 {
-    public function let()
+    function let()
     {
-        $this->beConstructedWith('default');
+        $this->beConstructedWith('default', 'http', 'localhost', 7474);
     }
 
-    public function it_is_initializable()
+    function it_is_initializable()
     {
         $this->shouldHaveType('NeoConnect\Connection\Connection');
     }
 
-    public function it_should_have_a_connection_alias_on_construction()
+    function it_should_have_a_connection_alias_on_construction()
     {
         $this->getAlias()->shouldNotBeNull();
     }
 
-    public function it_should_have_a_scheme_accessor()
+    function it_should_have_a_scheme_accessor()
     {
-        $this->getScheme()->shouldBeNull();
+        $this->getScheme()->shouldReturn('http');
     }
 
-    public function its_scheme_should_be_mutable()
+    function its_scheme_should_be_mutable()
     {
         $this->setScheme('http');
         $this->getScheme()->shouldReturn('http');
     }
 
-    public function its_scheme_should_be_http_or_https()
+    function its_scheme_should_be_http_or_https()
     {
         $this->shouldThrow('NeoConnect\Exception\InvalidSchemeException')->duringSetScheme('ftp');
     }
 
-    public function it_should_have_a_host_accessor()
+    function it_should_have_a_host_accessor()
     {
-        $this->getHost()->shouldBenull();
+        $this->getHost()->shouldReturn('localhost');
     }
 
-    public function its_host_should_be_mutable()
+    function its_host_should_be_mutable()
     {
         $this->setHost('localhost');
         $this->getHost()->shouldReturn('localhost');
     }
 
-    public function it_should_have_a_port_accessor()
+    function it_should_have_a_port_accessor()
     {
-        $this->getPort()->shouldBeNull();
+        $this->getPort()->shouldReturn(7474);
     }
 
-    public function its_port_should_be_mutable()
+    function its_port_should_be_mutable()
     {
         $this->setPort(7474);
         $this->getPort()->shouldReturn(7474);
     }
 
-    public function it_should_throw_exception_if_port_is_not_integer()
+    function it_should_build_the_base_url_on_construct()
+    {
+        $this->getBaseUrl()->shouldReturn('http://localhost:7474');
+    }
+
+    function it_should_throw_exception_if_port_is_not_integer()
     {
         $this->shouldThrow('\InvalidArgumentException')->duringSetPort('local');
     }
 
-    public function it_should_have_a_root_endpoint_accessor()
+    function it_should_have_a_root_endpoint_accessor()
     {
-        $this->getRootEndpoint()->shouldBeNull();
+        $this->getRootEndpoint()->shouldReturn('http://localhost:7474/');
     }
 
-    function it_should_return_root_endpoint_url_if_discovery_is_triggered(GuzzleHttpClient $client)
-    {
-        $this->setBaseUrl('http://localhost:7474');
-        $this->setHttpClient($client);
-        $client->send(Argument::any(), Argument::any())->willReturn(array(
-            'management' => 'http://localhost:7474/db/manage',
-            'data' => 'http://http://localhost:7474/db/data'
-        ));
-        $this->getRootEndpoint(true)->shouldHaveCount(2);
-
-    }
-
-    public function its_root_endpoint_should_be_mutable()
-    {
-        $this->setRootEndpoint('http://localhost:7474');
-        $this->getRootEndpoint()->shouldReturn('http://localhost:7474');
-    }
-
-    public function it_should_have_a_flush_strategy_accessor()
+    function it_should_have_a_flush_strategy_accessor()
     {
         $this->getFlushStrategy()->shouldBeNull();
     }
 
-    public function its_flush_strategy_should_be_mutable()
+    function its_flush_strategy_should_be_mutable()
     {
         $this->setFlushStrategy('manual_flush');
         $this->getFlushStrategy()->shouldReturn('manual_flush');
+    }
+
+    function it_should_return_the_transaction_endpoint()
+    {
+        $this->getTransactionEndpoint()->shouldReturn('http://localhost:7474/db/data/transaction');
+    }
+
+    function it_should_return_the_indexes_endpoint()
+    {
+        $this->getIndexesEndpoint()->shouldReturn('http://localhost:7474/db/data/schema/index');
+    }
+
+    function it_should_return_the_constraints_endpoint()
+    {
+        $this->getConstraintsEndpoint()->shouldReturn('http://localhost:7474/db/data/schema/constraint');
+    }
+
+    function it_should_return_the_labels_endpoint()
+    {
+        $this->getLabelsEndpoint()->shouldReturn('http://localhost:7474/db/data/labels');
     }
 }

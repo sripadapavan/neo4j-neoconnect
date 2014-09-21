@@ -38,6 +38,9 @@ class Transaction
 
     public function createRequest()
     {
-        return new Request();
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->setUrl($this->connection->getTransactionEndpoint());
+        $request->setBody($this->queue->prepareForFlush());
     }
 }
