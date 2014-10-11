@@ -1,6 +1,6 @@
-# NeoConnect
+# NeoConnect - WIP
 
-## Full-featured and flexible Neo4j Client for PHP
+## Leveraging NeoClient
 
 ### Introduction
 
